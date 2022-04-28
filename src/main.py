@@ -103,6 +103,7 @@ def createNoticias():
     imagen_secundaria_3 = request.json.get("imagen_secundaria_3", None)
     video_1 = request.json.get("video_1", None)
     video_2 = request.json.get("video_2", None)
+    enlace_1 = request.json.get("enlace_1", None)
     enlace_2 = request.json.get("enlace_2", None)
     enlace_3 = request.json.get("enlace_3", None)
 
