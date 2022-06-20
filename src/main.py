@@ -197,6 +197,7 @@ def newsNoticias(id):
     noticias.desarrollo4 = desarrollo4
     noticias.h6 = h6
     noticias.desarrollo5 = desarrollo5
+    noticias.desarrollo6 = desarrollo6
     noticias.imagen_principal = imagen_principal
     noticias.imagen_secundaria_1 = imagen_secundaria_1
     noticias.imagen_secundaria_2 = imagen_secundaria_2
