@@ -97,6 +97,7 @@ def createNoticias():
     desarrollo4 = request.json.get("desarrollo4", None)
     h6 = request.json.get("h6", None)
     desarrollo5 = request.json.get("desarrollo5", None)
+    desarrollo6 = request.json.get("desarrollo6", None)
     imagen_principal = request.json.get("imagen_principal", None)
     imagen_secundaria_1 = request.json.get("imagen_secundaria_1", None)
     imagen_secundaria_2 = request.json.get("imagen_secundaria_2", None)
@@ -134,6 +135,7 @@ def createNoticias():
             desarrollo4=desarrollo4,         
             h6=h6, 
             desarrollo5=desarrollo5, 
+            desarrollo6=desarrollo6, 
             imagen_principal=imagen_principal, 
             imagen_secundaria_1=imagen_secundaria_1, 
             imagen_secundaria_2=imagen_secundaria_2, 
@@ -169,6 +171,7 @@ def newsNoticias(id):
     desarrollo4 = request.json['desarrollo4']
     h6 = request.json['h6']
     desarrollo5 = request.json['desarrollo5']
+    desarrollo6 = request.json['desarrollo6']
     imagen_principal = request.json['imagen_principal']
     imagen_secundaria_1 = request.json['imagen_secundaria_1']
     imagen_secundaria_2 = request.json['imagen_secundaria_2']

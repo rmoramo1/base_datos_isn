@@ -44,6 +44,7 @@ class Noticias(db.Model):
     desarrollo4 = db.Column(db.TEXT(30000), nullable=False)
     h6 = db.Column(db.String(90), nullable=False)
     desarrollo5 = db.Column(db.TEXT(30000), nullable=False)
+    desarrollo6 = db.Column(db.TEXT(30000), nullable=False)
 
     imagen_principal = db.Column(db.String(90), nullable=False)
     imagen_secundaria_1 = db.Column(db.String(90), nullable=False)
@@ -76,6 +77,7 @@ class Noticias(db.Model):
             "desarrollo4": self.desarrollo4,
             "h6": self.h6,
             "desarrollo5": self.desarrollo5,
+            "desarrollo6": self.desarrollo6,
             "imagen_principal": self.imagen_principal,
             "imagen_secundaria_1": self.imagen_secundaria_1,
             "imagen_secundaria_2": self.imagen_secundaria_2,
