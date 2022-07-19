@@ -171,7 +171,6 @@ def createNoticias():
 
 @app.route('/noticias_skins', methods=['POST'])
 def createNoticias_Skins():
-    deporte = request.json.get("deporte", None)
     dia = request.json.get("dia", None)
     mes = request.json.get("mes", None)
     year = request.json.get("year", None)
