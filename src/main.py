@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Noticias, Noticias_Skins,Skin
+from models import db, User, Noticias, Noticias_Skins,Skin, Deporte
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -87,6 +87,15 @@ def escoger_skin():
     if request.method == "GET":
         records = Skin.query.all()
         return jsonify([Skin.serialize(record) for record in records])
+    else:
+        return jsonify({"msg": "no autorizado"})
+
+# ----------------------------------------------------------------------------
+@app.route("/deporte", methods=["GET"])
+def escoger_deporte():
+    if request.method == "GET":
+        records = Deporte.query.all()
+        return jsonify([Deporte.serialize(record) for record in records])
     else:
         return jsonify({"msg": "no autorizado"})
 
@@ -225,6 +234,23 @@ def create_Skins():
         db.session.commit()
         return jsonify({"msg": "Skin created successfully"}), 200
 
+
+@app.route('/deporte', methods=['POST'])
+def create_Deporte():
+    name = request.json.get("name", None)
+
+    deporte = Deporte.query.filter_by(name=name).first()
+
+    if deporte:
+        return jsonify({"msg": "deporte already exists", "status": deporte.name}), 401
+    else:
+        deporte = Deporte(
+            name=name,
+        )
+        db.session.add(deporte)
+        db.session.commit()
+        return jsonify({"msg": "Skin created successfully"}), 200
+
 # -------- put ----------------------------------------
 
 
@@ -321,6 +347,15 @@ def edit_skin(id):
     db.session.commit()
     return jsonify({"msg": "Skin edith successfully"}), 200
 
+@app.route('/deporte/<id>', methods=['PUT'])
+def edit_deporte(id):
+    deporte = Deporte.query.get(id)
+    name = request.json['name']
+    deporte.name = name
+
+    db.session.commit()
+    return jsonify({"msg": "deporte edith successfully"}), 200
+
 # -------- delete ----------------------------------------
 
 
@@ -346,3 +381,10 @@ def skin_delete(id):
     db.session.delete(skin)
     db.session.commit()
     return "skin was successfully deleted"
+
+@app.route("/deporte/<id>", methods=["DELETE"])
+def skin_delete(id):
+    deporte = Deporte.query.get(id)
+    db.session.delete(deporte)
+    db.session.commit()
+    return "deporte was successfully deleted"
