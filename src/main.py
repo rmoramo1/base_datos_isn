@@ -82,9 +82,8 @@ def noticias():
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
 
-
 @app.route("/skin", methods=["GET"])
-def skin():
+def esco_skins():
     if request.method == "GET":
         records = Skin.query.all()
         return jsonify([Skin.serialize(record) for record in records])
@@ -213,6 +212,7 @@ def createNoticias_Skin():
 @app.route('/skin', methods=['POST'])
 def create_Skins():
     name = request.json.get("name", None)
+    
     skin = Skin.query.filter_by(name=name).first()
 
     if skin:
