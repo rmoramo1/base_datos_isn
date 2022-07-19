@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db,User,Noticias, Noticias_Skins, Skin
+from models import db, User, Noticias, Noticias_Skins, Skin
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -41,7 +41,9 @@ def sitemap():
 
 # obtener usuario de base de datos y crea token
 
-#obtener usuario de base de datos y crea token
+# obtener usuario de base de datos y crea token
+
+
 @app.route('/login', methods=['POST'])
 def login():
     name = request.json.get("name", None)
@@ -52,13 +54,14 @@ def login():
     user = User.query.filter_by(mail=mail, password=password).first()
     # valida si estan vacios los ingresos
     if user is None:
-       return jsonify({"msg": "Bad mail or password"}), 401
+        return jsonify({"msg": "Bad mail or password"}), 401
     # crear token login
 
     access_token = create_access_token(identity=mail)
-    return jsonify({"token": access_token, "username":user.name})
+    return jsonify({"token": access_token, "username": user.name})
 
-#obtiene usuario----------------------------------------
+# obtiene usuario----------------------------------------
+
 
 @app.route("/user", methods=["GET"])
 def user():
@@ -68,6 +71,8 @@ def user():
     else:
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
+
+
 @app.route("/noticias", methods=["GET"])
 def noticias():
     if request.method == "GET":
@@ -76,6 +81,8 @@ def noticias():
     else:
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
+
+
 @app.route("/skin", methods=["GET"])
 def skins():
     if request.method == "GET":
@@ -84,6 +91,8 @@ def skins():
     else:
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
+
+
 @app.route("/noticias_skins", methods=["GET"])
 def noticias_skins():
     if request.method == "GET":
@@ -93,6 +102,7 @@ def noticias_skins():
         return jsonify({"msg": "no autorizado"})
 
 # --------------------------post methot--------------------------------------------
+
 
 @app.route('/noticias', methods=['POST'])
 def createNoticias():
@@ -136,38 +146,39 @@ def createNoticias():
         # crea noticias nuevo
         # crea registro nuevo en BBDD de
         noticias = Noticias(
-            autor=autor, 
-            top_head_line=top_head_line, 
-            deporte=deporte, 
-            dia=dia, 
-            mes=mes, 
-            year=year, 
-            h1=h1, 
-            descripcion=descripcion, 
-            h2=h2, 
-            desarrollo1=desarrollo1, 
+            autor=autor,
+            top_head_line=top_head_line,
+            deporte=deporte,
+            dia=dia,
+            mes=mes,
+            year=year,
+            h1=h1,
+            descripcion=descripcion,
+            h2=h2,
+            desarrollo1=desarrollo1,
             h3=h3,
-            desarrollo2=desarrollo2, 
-            h4=h4, 
-            desarrollo3=desarrollo3, 
-            h5=h5, 
-            desarrollo4=desarrollo4,         
-            h6=h6, 
-            desarrollo5=desarrollo5, 
-            desarrollo6=desarrollo6, 
-            imagen_principal=imagen_principal, 
-            imagen_secundaria_1=imagen_secundaria_1, 
-            imagen_secundaria_2=imagen_secundaria_2, 
-            imagen_secundaria_3=imagen_secundaria_3, 
-            video_1=video_1, 
-            video_2=video_2, 
-            enlace_1=enlace_1, 
-            enlace_2=enlace_2, 
-            enlace_3=enlace_3, 
-            )
+            desarrollo2=desarrollo2,
+            h4=h4,
+            desarrollo3=desarrollo3,
+            h5=h5,
+            desarrollo4=desarrollo4,
+            h6=h6,
+            desarrollo5=desarrollo5,
+            desarrollo6=desarrollo6,
+            imagen_principal=imagen_principal,
+            imagen_secundaria_1=imagen_secundaria_1,
+            imagen_secundaria_2=imagen_secundaria_2,
+            imagen_secundaria_3=imagen_secundaria_3,
+            video_1=video_1,
+            video_2=video_2,
+            enlace_1=enlace_1,
+            enlace_2=enlace_2,
+            enlace_3=enlace_3,
+        )
         db.session.add(noticias)
         db.session.commit()
         return jsonify({"msg": "User created successfully"}), 200
+
 
 @app.route('/noticias_skins', methods=['POST'])
 def createNoticias_Skins():
@@ -177,11 +188,10 @@ def createNoticias_Skins():
     skin = request.json.get("skin", None)
     h1 = request.json.get("h1", None)
     descripcion = request.json.get("descripcion", None)
-
     # valida si estan vacios los ingresos
-
     # busca noticias en BBDD
-    noticias_skins = Noticias_Skins.query.filter_by(h1=h1, descripcion=descripcion ,skin=skin).first()
+    noticias_skins = Noticias_Skins.query.filter_by(
+        h1=h1, descripcion=descripcion, skin=skin).first()
     # the noticias was not found on the database
     if noticias:
         return jsonify({"msg": "Noticias_Skins already exists", "status": noticias_skins.h1}), 401
@@ -189,16 +199,17 @@ def createNoticias_Skins():
         # crea noticias nuevo
         # crea registro nuevo en BBDD de
         noticias_skins = Noticias_Skins(
-            dia=dia, 
-            mes=mes, 
-            year=year, 
-            skin=skin, 
-            h1=h1, 
-            descripcion=descripcion, 
-            )
+            dia=dia,
+            mes=mes,
+            year=year,
+            skin=skin,
+            h1=h1,
+            descripcion=descripcion,
+        )
         db.session.add(noticias_skins)
         db.session.commit()
-        return jsonify({"msg": "User created successfully"}), 200
+        return jsonify({"msg": "Noticias Skins created successfully"}), 200
+
 
 @app.route('/skin', methods=['POST'])
 def create_Skins():
@@ -209,13 +220,14 @@ def create_Skins():
         return jsonify({"msg": "Skin already exists", "status": skin.name}), 401
     else:
         skin = Skin(
-            name=name, 
-            )
+            name=name,
+        )
         db.session.add(skin)
         db.session.commit()
         return jsonify({"msg": "Skin created successfully"}), 200
 
 # -------- put ----------------------------------------
+
 
 @app.route('/noticias/<id>', methods=['PUT'])
 def newsNoticias(id):
@@ -280,6 +292,7 @@ def newsNoticias(id):
     db.session.commit()
     return jsonify({"msg": "noticias edith successfully"}), 200
 
+
 @app.route('/noticias_skins/<id>', methods=['PUT'])
 def newsNoticias_Skins(id):
     noticias_skins = Noticias_Skins.query.get(id)
@@ -299,6 +312,7 @@ def newsNoticias_Skins(id):
     db.session.commit()
     return jsonify({"msg": "Noticias_Skins edith successfully"}), 200
 
+
 @app.route('/skin/<id>', methods=['PUT'])
 def Skin(id):
     skin = Skin.query.get(id)
@@ -310,6 +324,7 @@ def Skin(id):
 
 # -------- delete ----------------------------------------
 
+
 @app.route("/noticias/<id>", methods=["DELETE"])
 def noticias_delete(id):
     noticias = Noticias.query.get(id)
@@ -317,12 +332,14 @@ def noticias_delete(id):
     db.session.commit()
     return "Noticia was successfully deleted"
 
+
 @app.route("/noticias_skins/<id>", methods=["DELETE"])
 def noticias_skin_delete(id):
     noticias_skins = Noticias_Skins.query.get(id)
     db.session.delete(noticias_skins)
     db.session.commit()
     return "noticias_skins was successfully deleted"
+
 
 @app.route("/skin/<id>", methods=["DELETE"])
 def skin_delete(id):
