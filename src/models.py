@@ -123,5 +123,5 @@ class Skin(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.name,
+            "name": self.name
         }

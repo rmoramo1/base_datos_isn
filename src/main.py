@@ -84,7 +84,7 @@ def noticias():
 
 
 @app.route("/skin", methods=["GET"])
-def skins():
+def skin():
     if request.method == "GET":
         records = Skin.query.all()
         return jsonify([Skin.serialize(record) for record in records])
@@ -215,7 +215,7 @@ def create_Skins():
     name = request.json.get("name", None)
     skin = Skin.query.filter_by(name=name).first()
 
-    if noticias:
+    if skin:
         return jsonify({"msg": "Skin already exists", "status": skin.name}), 401
     else:
         skin = Skin(
