@@ -383,7 +383,7 @@ def skin_delete(id):
     return "skin was successfully deleted"
 
 @app.route("/deporte/<id>", methods=["DELETE"])
-def skin_delete(id):
+def deporte_delete(id):
     deporte = Deporte.query.get(id)
     db.session.delete(deporte)
     db.session.commit()
