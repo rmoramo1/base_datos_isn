@@ -181,7 +181,7 @@ def createNoticias():
 
 
 @app.route('/noticias_skins', methods=['POST'])
-def createNoticias_Skins():
+def createNoticias_Skin():
     dia = request.json.get("dia", None)
     mes = request.json.get("mes", None)
     year = request.json.get("year", None)
@@ -190,11 +190,10 @@ def createNoticias_Skins():
     descripcion = request.json.get("descripcion", None)
     # valida si estan vacios los ingresos
     # busca noticias en BBDD
-    noticias_skins = Noticias_Skins.query.filter_by(
-        h1=h1, descripcion=descripcion, skin=skin).first()
+    noticias_skins = Noticias_Skins.query.filter_by(h1=h1, descripcion=descripcion).first()
     # the noticias was not found on the database
     if noticias:
-        return jsonify({"msg": "Noticias_Skins already exists", "status": noticias_skins.h1}), 401
+        return jsonify({"msg": "noticias_skins already exists", "status": noticias_skins.h1}), 401
     else:
         # crea noticias nuevo
         # crea registro nuevo en BBDD de
@@ -208,7 +207,7 @@ def createNoticias_Skins():
         )
         db.session.add(noticias_skins)
         db.session.commit()
-        return jsonify({"msg": "Noticias Skins created successfully"}), 200
+        return jsonify({"msg": "User created successfully"}), 200
 
 
 @app.route('/skin', methods=['POST'])
