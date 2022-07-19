@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db,User,Noticias 
+from models import db,User,Noticias, Noticias_Skins, Skin
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -75,13 +75,30 @@ def noticias():
         return jsonify([Noticias.serialize(record) for record in records])
     else:
         return jsonify({"msg": "no autorizado"})
-
+# ----------------------------------------------------------------------------
+@app.route("/skin", methods=["GET"])
+def skins():
+    if request.method == "GET":
+        records = Skin.query.all()
+        return jsonify([Skin.serialize(record) for record in records])
+    else:
+        return jsonify({"msg": "no autorizado"})
+# ----------------------------------------------------------------------------
+@app.route("/noticias_skins", methods=["GET"])
+def noticias_skins():
+    if request.method == "GET":
+        records = Noticias_Skins.query.all()
+        return jsonify([Noticias_Skins.serialize(record) for record in records])
+    else:
+        return jsonify({"msg": "no autorizado"})
 
 # --------------------------post methot--------------------------------------------
 
 @app.route('/noticias', methods=['POST'])
 def createNoticias():
     autor = request.json.get("autor", None)
+    top_head_line = request.json.get("top_head_line", None)
+    deporte = request.json.get("deporte", None)
     dia = request.json.get("dia", None)
     mes = request.json.get("mes", None)
     year = request.json.get("year", None)
@@ -120,6 +137,8 @@ def createNoticias():
         # crea registro nuevo en BBDD de
         noticias = Noticias(
             autor=autor, 
+            top_head_line=top_head_line, 
+            deporte=deporte, 
             dia=dia, 
             mes=mes, 
             year=year, 
@@ -150,12 +169,61 @@ def createNoticias():
         db.session.commit()
         return jsonify({"msg": "User created successfully"}), 200
 
+@app.route('/noticias_skins', methods=['POST'])
+def createNoticias_Skins():
+    deporte = request.json.get("deporte", None)
+    dia = request.json.get("dia", None)
+    mes = request.json.get("mes", None)
+    year = request.json.get("year", None)
+    skin = request.json.get("skin", None)
+    h1 = request.json.get("h1", None)
+    descripcion = request.json.get("descripcion", None)
+
+    # valida si estan vacios los ingresos
+
+    # busca noticias en BBDD
+    noticias_skins = Noticias_Skins.query.filter_by(h1=h1, descripcion=descripcion ,skin=skin).first()
+    # the noticias was not found on the database
+    if noticias:
+        return jsonify({"msg": "Noticias_Skins already exists", "status": noticias_skins.h1}), 401
+    else:
+        # crea noticias nuevo
+        # crea registro nuevo en BBDD de
+        noticias_skins = Noticias_Skins(
+            dia=dia, 
+            mes=mes, 
+            year=year, 
+            skin=skin, 
+            h1=h1, 
+            descripcion=descripcion, 
+            )
+        db.session.add(noticias_skins)
+        db.session.commit()
+        return jsonify({"msg": "User created successfully"}), 200
+
+@app.route('/skin', methods=['POST'])
+def create_Skins():
+    name = request.json.get("name", None)
+    skin = Skin.query.filter_by(name=name).first()
+
+    if noticias:
+        return jsonify({"msg": "Skin already exists", "status": skin.name}), 401
+    else:
+        skin = Skin(
+            name=name, 
+            )
+        db.session.add(skin)
+        db.session.commit()
+        return jsonify({"msg": "Skin created successfully"}), 200
+
 # -------- put ----------------------------------------
 
 @app.route('/noticias/<id>', methods=['PUT'])
 def newsNoticias(id):
     noticias = Noticias.query.get(id)
     autor = request.json['autor']
+    top_head_line = request.json['top_head_line']
+    deporte = request.json['deporte']
     dia = request.json['dia']
     mes = request.json['mes']
     year = request.json['year']
@@ -182,6 +250,8 @@ def newsNoticias(id):
     enlace_2 = request.json['enlace_2']
     enlace_3 = request.json['enlace_3']
     noticias.autor = autor
+    noticias.top_head_line = top_head_line
+    noticias.deporte = deporte
     noticias.dia = dia
     noticias.mes = mes
     noticias.year = year
@@ -211,6 +281,34 @@ def newsNoticias(id):
     db.session.commit()
     return jsonify({"msg": "noticias edith successfully"}), 200
 
+@app.route('/noticias_skins/<id>', methods=['PUT'])
+def newsNoticias_Skins(id):
+    noticias_skins = Noticias_Skins.query.get(id)
+    dia = request.json['dia']
+    mes = request.json['mes']
+    year = request.json['year']
+    skin = request.json['skin']
+    h1 = request.json['h1']
+    descripcion = request.json['descripcion']
+    noticias_skins.dia = dia
+    noticias_skins.mes = mes
+    noticias_skins.year = year
+    noticias_skins.skin = skin
+    noticias_skins.h1 = h1
+    noticias_skins.descripcion = descripcion
+
+    db.session.commit()
+    return jsonify({"msg": "Noticias_Skins edith successfully"}), 200
+
+@app.route('/skin/<id>', methods=['PUT'])
+def Skin(id):
+    skin = Skin.query.get(id)
+    name = request.json['name']
+    skin.name = name
+
+    db.session.commit()
+    return jsonify({"msg": "Skin edith successfully"}), 200
+
 # -------- delete ----------------------------------------
 
 @app.route("/noticias/<id>", methods=["DELETE"])
@@ -219,3 +317,17 @@ def noticias_delete(id):
     db.session.delete(noticias)
     db.session.commit()
     return "Noticia was successfully deleted"
+
+@app.route("/noticias_skins/<id>", methods=["DELETE"])
+def noticias_skin_delete(id):
+    noticias_skins = Noticias_Skins.query.get(id)
+    db.session.delete(noticias_skins)
+    db.session.commit()
+    return "noticias_skins was successfully deleted"
+
+@app.route("/skin/<id>", methods=["DELETE"])
+def skin_delete(id):
+    skin = Skin.query.get(id)
+    db.session.delete(skin)
+    db.session.commit()
+    return "skin was successfully deleted"

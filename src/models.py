@@ -26,6 +26,8 @@ class Noticias(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     autor = db.Column(db.String(20), nullable=False)
+    top_head_line = db.Column(db.String(5), nullable=False)
+    deporte = db.Column(db.String(20), nullable=False)
 
     dia = db.Column(db.String(8), nullable=False)
     mes = db.Column(db.String(5), nullable=False)
@@ -62,6 +64,8 @@ class Noticias(db.Model):
         return {
             "id": self.id,
             "autor": self.autor,
+            "top_head_line":self.top_head_line,
+            "deporte":self.deporte,
             "dia": self.dia,
             "mes": self.mes,
             "year": self.year,
@@ -88,4 +92,35 @@ class Noticias(db.Model):
             "enlace_2": self.enlace_2,
             "enlace_3": self.enlace_3,
         }
+class Noticias_Skins(db.Model):
+    __tablename__ = 'noticias_skins'
 
+    id = db.Column(db.Integer, primary_key=True)
+    dia = db.Column(db.String(8), nullable=False)
+    mes = db.Column(db.String(5), nullable=False)
+    year = db.Column(db.String(5), nullable=False)
+    skin = db.Column(db.String(20), nullable=False)
+    h1 = db.Column(db.String(90), nullable=False)
+    descripcion = db.Column(db.String(200), nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "dia": self.dia,
+            "mes": self.mes,
+            "year": self.year,
+            "skin": self.skin,
+            "h1": self.h1,
+            "descripcion": self.descripcion
+        }
+class Skin(db.Model):
+    __tablename__ = 'skin'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
