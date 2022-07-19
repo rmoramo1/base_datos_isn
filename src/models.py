@@ -113,6 +113,7 @@ class Noticias_Skins(db.Model):
             "h1": self.h1,
             "descripcion": self.descripcion
         }
+        
 class Skin(db.Model):
     __tablename__ = 'skin'
 
