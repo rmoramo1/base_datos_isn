@@ -192,7 +192,7 @@ def createNoticias_Skin():
     # busca noticias en BBDD
     noticias_skins = Noticias_Skins.query.filter_by(h1=h1, descripcion=descripcion).first()
     # the noticias was not found on the database
-    if noticias:
+    if noticias_skins:
         return jsonify({"msg": "noticias_skins already exists", "status": noticias_skins.h1}), 401
     else:
         # crea noticias nuevo
