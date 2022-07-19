@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Noticias, Noticias_Skins, Skin
+from models import db, User, Noticias, Noticias_Skins,Skin
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -83,14 +83,14 @@ def noticias():
 # ----------------------------------------------------------------------------
 
 @app.route("/skin", methods=["GET"])
-def esco_skins():
+def escoger_skin():
     if request.method == "GET":
         records = Skin.query.all()
         return jsonify([Skin.serialize(record) for record in records])
     else:
         return jsonify({"msg": "no autorizado"})
-# ----------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------
 
 @app.route("/noticias_skins", methods=["GET"])
 def noticias_skins():
@@ -212,7 +212,7 @@ def createNoticias_Skin():
 @app.route('/skin', methods=['POST'])
 def create_Skins():
     name = request.json.get("name", None)
-    
+
     skin = Skin.query.filter_by(name=name).first()
 
     if skin:
@@ -313,7 +313,7 @@ def newsNoticias_Skins(id):
 
 
 @app.route('/skin/<id>', methods=['PUT'])
-def Skin(id):
+def edit_skin(id):
     skin = Skin.query.get(id)
     name = request.json['name']
     skin.name = name
