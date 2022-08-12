@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Noticias, Noticias_Skins, Skin, Deporte
+from models import db, User, Noticias, Noticias_Skins , Skin, Deporte
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -201,6 +201,7 @@ def createNoticias_Skin():
     h1 = request.json.get("h1", None)
     descripcion = request.json.get("descripcion", None)
     imagen_principal = request.json.get("imagen_principal", None)
+
     # valida si estan vacios los ingresos
     # busca noticias en BBDD
     noticias_skins = Noticias_Skins.query.filter_by(
@@ -218,7 +219,7 @@ def createNoticias_Skin():
             skin=skin,
             h1=h1,
             descripcion=descripcion,
-            imagen_principal=imagen_principal
+            imagen_principal=imagen_principal,
         )
         db.session.add(noticias_skins)
         db.session.commit()
