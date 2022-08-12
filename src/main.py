@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Noticias, Noticias_Skins,Skin, Deporte
+from models import db, User, Noticias, Noticias_Skins, Skin, Deporte
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -82,6 +82,7 @@ def noticias():
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
 
+
 @app.route("/skin", methods=["GET"])
 def escoger_skin():
     if request.method == "GET":
@@ -91,6 +92,8 @@ def escoger_skin():
         return jsonify({"msg": "no autorizado"})
 
 # ----------------------------------------------------------------------------
+
+
 @app.route("/deporte", methods=["GET"])
 def escoger_deporte():
     if request.method == "GET":
@@ -100,6 +103,7 @@ def escoger_deporte():
         return jsonify({"msg": "no autorizado"})
 
 # ----------------------------------------------------------------------------
+
 
 @app.route("/noticias_skins", methods=["GET"])
 def noticias_skins():
@@ -199,7 +203,8 @@ def createNoticias_Skin():
     imagen_principal = request.json.get("imagen_principal", None)
     # valida si estan vacios los ingresos
     # busca noticias en BBDD
-    noticias_skins = Noticias_Skins.query.filter_by(h1=h1, descripcion=descripcion).first()
+    noticias_skins = Noticias_Skins.query.filter_by(
+        h1=h1, descripcion=descripcion).first()
     # the noticias was not found on the database
     if noticias_skins:
         return jsonify({"msg": "noticias_skins already exists", "status": noticias_skins.h1}), 401
@@ -213,7 +218,7 @@ def createNoticias_Skin():
             skin=skin,
             h1=h1,
             descripcion=descripcion,
-            imagen_principal=imagen_principal,
+            imagen_principal=imagen_principal
         )
         db.session.add(noticias_skins)
         db.session.commit()
@@ -336,8 +341,8 @@ def newsNoticias_Skins(id):
     noticias_skins.year = year
     noticias_skins.skin = skin
     noticias_skins.h1 = h1
-    noticias_skins.descripcion = descripcion 
-    noticias_skins.imagen_principal = imagen_principal 
+    noticias_skins.descripcion = descripcion
+    noticias_skins.imagen_principal = imagen_principal
 
     db.session.commit()
     return jsonify({"msg": "Noticias_Skins edith successfully"}), 200
@@ -351,6 +356,7 @@ def edit_skin(id):
 
     db.session.commit()
     return jsonify({"msg": "Skin edith successfully"}), 200
+
 
 @app.route('/deporte/<id>', methods=['PUT'])
 def edit_deporte(id):
@@ -386,6 +392,7 @@ def skin_delete(id):
     db.session.delete(skin)
     db.session.commit()
     return "skin was successfully deleted"
+
 
 @app.route("/deporte/<id>", methods=["DELETE"])
 def deporte_delete(id):
