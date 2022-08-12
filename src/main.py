@@ -196,6 +196,7 @@ def createNoticias_Skin():
     skin = request.json.get("skin", None)
     h1 = request.json.get("h1", None)
     descripcion = request.json.get("descripcion", None)
+    imagen = request.json.get("imagen", None)
     # valida si estan vacios los ingresos
     # busca noticias en BBDD
     noticias_skins = Noticias_Skins.query.filter_by(h1=h1, descripcion=descripcion).first()
@@ -212,6 +213,7 @@ def createNoticias_Skin():
             skin=skin,
             h1=h1,
             descripcion=descripcion,
+            imagen=imagen,
         )
         db.session.add(noticias_skins)
         db.session.commit()
@@ -327,12 +329,14 @@ def newsNoticias_Skins(id):
     skin = request.json['skin']
     h1 = request.json['h1']
     descripcion = request.json['descripcion']
+    imagen = request.json['imagen']
     noticias_skins.dia = dia
     noticias_skins.mes = mes
     noticias_skins.year = year
     noticias_skins.skin = skin
     noticias_skins.h1 = h1
-    noticias_skins.descripcion = descripcion
+    noticias_skins.descripcion = descripcion 
+    noticias_skins.imagen = imagen 
 
     db.session.commit()
     return jsonify({"msg": "Noticias_Skins edith successfully"}), 200

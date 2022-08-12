@@ -100,8 +100,8 @@ class Noticias_Skins(db.Model):
     mes = db.Column(db.String(5), nullable=False)
     year = db.Column(db.String(5), nullable=False)
     skin = db.Column(db.String(20), nullable=False)
-    h1 = db.Column(db.String(90), nullable=False)
     descripcion = db.Column(db.String(500), nullable=False)
+    imagen = db.Column(db.String(90), nullable=False)
 
     def serialize(self):
         return {
@@ -111,7 +111,8 @@ class Noticias_Skins(db.Model):
             "year": self.year,
             "skin": self.skin,
             "h1": self.h1,
-            "descripcion": self.descripcion
+            "descripcion": self.descripcion,
+            "imagen": self.imagen
         }
 
 class Skin(db.Model):
