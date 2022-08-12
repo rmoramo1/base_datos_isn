@@ -336,6 +336,7 @@ def newsNoticias_Skins(id):
     h1 = request.json['h1']
     descripcion = request.json['descripcion']
     imagen_principal = request.json['imagen_principal']
+    
     noticias_skins.dia = dia
     noticias_skins.mes = mes
     noticias_skins.year = year
