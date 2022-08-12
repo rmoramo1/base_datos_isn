@@ -94,7 +94,6 @@ class Noticias(db.Model):
         }
 class Noticias_Skins(db.Model):
     __tablename__ = 'noticias_skins'
-
     id = db.Column(db.Integer, primary_key=True)
     dia = db.Column(db.String(8), nullable=False)
     mes = db.Column(db.String(5), nullable=False)
@@ -112,7 +111,7 @@ class Noticias_Skins(db.Model):
             "skin": self.skin,
             "h1": self.h1,
             "descripcion": self.descripcion,
-            "imagen_principal": self.imagen_principal
+            "imagen_principal": self.imagen_principal,
         }
 
 class Skin(db.Model):
