@@ -111,7 +111,7 @@ class Noticias_Skins(db.Model):
             "skin": self.skin,
             "h1": self.h1,
             "descripcion": self.descripcion,
-            "imagen_principal": self.imagen_principal
+            "imagen_principal": self.imagen_principal,
         }
 
 class Skin(db.Model):
