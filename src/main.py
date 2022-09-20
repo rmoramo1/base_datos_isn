@@ -104,7 +104,7 @@ def createUpload():
 
         upload = Upload(
             image=image,
-            name=filename,
+            name=name,
             mimetype=mimetype,
 
             like=like,
