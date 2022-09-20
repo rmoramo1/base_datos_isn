@@ -83,61 +83,38 @@ def Upload_GET():
 # --------------------------post methot--------------------------------------------
 
 
-# @app.route('/upload', methods=['POST1'])
-# def createUpload():
-
-#     file = request.files["file"]
-
-
-#     name = request.json.get("name", None)
-#     mimetype = request.json.get("mimetype", None)
-
-#     like = request.json.get("like", None)
-#     dislike = request.json.get("dislike", None)
-#     comentario = request.json.get("comentario", None)
-#     usuario = request.json.get("usuario", None)
-
-#     upload = Upload.query.filter_by(image=image, name=name).first()
-#     # the noticias was not found on the database
-#     if upload:
-#         return jsonify({"msg": "stats_punting_player_nfl already exists", "name": upload.name}), 401
-#     else:
-#         # filename = secure_filename(image.filename)
-#         # mimetype = image.mimetype
-#         upload = Upload(
-#             name=file.filename,
-#             image=file.read(),
-#             mimetype=mimetype,
-
-#             like=like,
-#             dislike=dislike,
-#             comentario=comentario,
-#             usuario=usuario
-#         )
-#     db.session.add(upload)
-#     db.session.commit()
-#     return jsonify({"msg": "image created successfully"}), 200
-
-
-
-@app.route('/upload', methods=['POST1'])
+@app.route('/upload', methods=['POST'])
 def createUpload():
 
-    file = request.files["file"]
+    image = request.json.get("image", None)
+    name = request.json.get("name", None)
+    mimetype = request.json.get("mimetype", None)
 
-    upload = Upload(
-        name=file.filename,
-        image=encode(file.read()),
-        mimetype=mimetype,
+    like = request.json.get("like", None)
+    dislike = request.json.get("dislike", None)
+    comentario = request.json.get("comentario", None)
+    usuario = request.json.get("usuario", None)
 
-        like=like,
-        dislike=dislike,
-        comentario=comentario,
-        usuario=usuario
-    )
+    upload = Upload.query.filter_by(image=image, name=name).first()
+    # the noticias was not found on the database
+    if upload:
+        return jsonify({"msg": "stats_punting_player_nfl already exists", "name": upload.name}), 401
+    else:
+        # filename = secure_filename(image.filename)
+        # mimetype = image.mimetype
+        upload = Upload(
+            image=image,
+            name=name,
+            mimetype=mimetype,
+
+            like=like,
+            dislike=dislike,
+            comentario=comentario,
+            usuario=usuario
+        )
     db.session.add(upload)
     db.session.commit()
-#     return jsonify({"msg": "image created successfully"}), 200
+    return jsonify({"msg": "image created successfully"}), 200
 
 
 # -------- put ----------------------------------------
