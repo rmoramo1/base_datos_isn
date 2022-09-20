@@ -94,8 +94,7 @@ def createUpload():
     comentario = request.files("comentario", None)
     usuario = request.files("usuario", None)
 
-    upload = Upload.query.filter_by(
-        h1=h1, pic=pic).first()
+    upload = Upload.query.filter_by(image=image, name=name).first()
     # the noticias was not found on the database
     if not upload:
         return "Upload already exists", 400
