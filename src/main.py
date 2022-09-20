@@ -103,7 +103,7 @@ def createUpload():
     mimetype = image.mimetype
 
     upload = Upload(
-        image=image.read(),
+        image=image,
         name=name,
         mimetype=mimetype,
 
