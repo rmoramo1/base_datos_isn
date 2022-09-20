@@ -86,13 +86,13 @@ def Upload_GET():
 @app.route('/upload', methods=['POST'])
 def createUpload():
 
-    image = request.files("image", None)
-    name = request.files("name", None)
-    mimetype = request.files("mimetype", None)
-    like = request.files("like", None)
-    dislike = request.files("dislike", None)
-    comentario = request.files("comentario", None)
-    usuario = request.files("usuario", None)
+    image = request.json("image", None)
+    name = request.json("name", None)
+    mimetype = request.json("mimetype", None)
+    like = request.json("like", None)
+    dislike = request.json("dislike", None)
+    comentario = request.json("comentario", None)
+    usuario = request.json("usuario", None)
 
     upload = Upload.query.filter_by(image=image, name=name).first()
     # the noticias was not found on the database
