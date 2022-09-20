@@ -86,7 +86,10 @@ def Upload_GET():
 @app.route('/upload', methods=['POST1'])
 def createUpload():
 
-    image = request.files("image")
+    image = request.images['image']
+    data = image.read()
+    render_image = render_picture(data)
+
     name = request.json.get("name", None)
     mimetype = request.json.get("mimetype", None)
 
@@ -96,25 +99,25 @@ def createUpload():
     usuario = request.json.get("usuario", None)
 
     upload = Upload.query.filter_by(image=image, name=name).first()
-    # the noticias was not found on the database
+       # the noticias was not found on the database
     if upload:
-        return jsonify({"msg": "stats_punting_player_nfl already exists", "name": upload.name}), 401
+            return jsonify({"msg": "stats_punting_player_nfl already exists", "name": upload.name}), 401
     else:
-        # filename = secure_filename(image.filename)
-        # mimetype = image.mimetype
-        upload = Upload(
-            image=image,
-            name=name,
-            mimetype=mimetype,
+            # filename = secure_filename(image.filename)
+            # mimetype = image.mimetype
+            upload = Upload(
+                image=render_image,
+                name=name,
+                mimetype=mimetype,
 
-            like=like,
-            dislike=dislike,
-            comentario=comentario,
-            usuario=usuario
-        )
-    db.session.add(upload)
-    db.session.commit()
-    return jsonify({"msg": "image created successfully"}), 200
+                like=like,
+                dislike=dislike,
+                comentario=comentario,
+                usuario=usuario
+            )
+            db.session.add(upload)
+            db.session.commit()
+            return jsonify({"msg": "image created successfully"}), 200
 
 
 # -------- put ----------------------------------------
