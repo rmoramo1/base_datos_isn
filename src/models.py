@@ -33,7 +33,7 @@ class Upload(db.Model):
 
     like = db.Column(db.String(20), nullable=False)
     dislike = db.Column(db.String(20), nullable=False)
-    comentario = db.Column(db.String(20), nullable=False)
+    comentario = db.Column(db.String(1500), nullable=False)
     usuario = db.Column(db.String(20), nullable=False)
 
     def serialize(self):

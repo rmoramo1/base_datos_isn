@@ -86,7 +86,7 @@ def Upload_GET():
 @app.route('/upload', methods=['POST'])
 def createUpload():
 
-    image = request.json("image", None)
+    image = request.files("image", None)
     name = request.json("name", None)
     mimetype = request.json("mimetype", None)
     like = request.json("like", None)
@@ -94,7 +94,7 @@ def createUpload():
     comentario = request.json("comentario", None)
     usuario = request.json("usuario", None)
 
-    upload = Upload.query.filter_by(image=image, name=name).first()
+    #upload = Upload.query.filter_by(image=image, name=name).first()
     # the noticias was not found on the database
     if not upload:
         return "Upload already exists", 400
@@ -104,7 +104,7 @@ def createUpload():
 
     upload = Upload(
         image=image.read(),
-        name=name,
+        name=filename,
         mimetype=mimetype,
 
         like=like,
