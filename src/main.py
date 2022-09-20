@@ -99,8 +99,8 @@ def createUpload():
     if upload:
         return jsonify({"msg": "stats_punting_player_nfl already exists", "name": upload.name}), 401
     else:
-        filename = secure_filename(image.filename)
-        mimetype = image.mimetype
+        # filename = secure_filename(image.filename)
+        # mimetype = image.mimetype
 
         upload = Upload(
             image=image,
