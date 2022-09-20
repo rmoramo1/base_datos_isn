@@ -96,22 +96,22 @@ def createUpload():
 
     upload = Upload.query.filter_by(image=image, name=name).first()
     # the noticias was not found on the database
-    if not upload:
-        return "Upload already exists", 400
+    if upload:
+        return jsonify({"msg": "stats_punting_player_nfl already exists", "name": upload.name}), 401
+    else:
+        filename = secure_filename(image.filename)
+        mimetype = image.mimetype
 
-    filename = secure_filename(image.filename)
-    mimetype = image.mimetype
+        upload = Upload(
+            image=image,
+            name=name,
+            mimetype=mimetype,
 
-    upload = Upload(
-        image=image,
-        name=name,
-        mimetype=mimetype,
-
-        like=like,
-        dislike=dislike,
-        comentario=comentario,
-        usuario=usuario
-    )
+            like=like,
+            dislike=dislike,
+            comentario=comentario,
+            usuario=usuario
+        )
     db.session.add(upload)
     db.session.commit()
     return jsonify({"msg": "User created successfully"}), 200
