@@ -86,7 +86,7 @@ def Upload_GET():
 @app.route('/upload', methods=['POST'])
 def createUpload():
 
-    image = request.json("image", None)
+    image = request.files['file']
     name = request.json("name", None)
     mimetype = request.json("mimetype", None)
     like = request.json("like", None)
@@ -103,7 +103,7 @@ def createUpload():
         # mimetype = image.mimetype
 
         upload = Upload(
-            image=image,
+            image=image.read(),
             name=name,
             mimetype=mimetype,
 

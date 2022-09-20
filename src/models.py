@@ -28,7 +28,7 @@ class Upload(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.TEXT, nullable=False)
-    name = db.Column(db.TEXT, nullable=False)
+    name = db.Column(db.LargeBinary, nullable=False)
     mimetype = db.Column(db.TEXT, nullable=False)
 
     like = db.Column(db.String(20), nullable=False)
