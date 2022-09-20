@@ -83,12 +83,13 @@ def Upload_GET():
 # --------------------------post methot--------------------------------------------
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['POST1'])
 def createUpload():
 
-    image = request.json.get("image", None)
+    image = request.files("image")
     name = request.json.get("name", None)
     mimetype = request.json.get("mimetype", None)
+
     like = request.json.get("like", None)
     dislike = request.json.get("dislike", None)
     comentario = request.json.get("comentario", None)
@@ -101,7 +102,6 @@ def createUpload():
     else:
         # filename = secure_filename(image.filename)
         # mimetype = image.mimetype
-
         upload = Upload(
             image=image,
             name=name,
@@ -114,7 +114,7 @@ def createUpload():
         )
     db.session.add(upload)
     db.session.commit()
-    return jsonify({"msg": "User created successfully"}), 200
+    return jsonify({"msg": "image created successfully"}), 200
 
 
 # -------- put ----------------------------------------

@@ -27,7 +27,7 @@ class Upload(db.Model):
     __tablename__ = 'upload'
 
     id = db.Column(db.Integer, primary_key=True)
-    image = db.Column(db.LargeBinary, nullable=False)
+    image = db.Column(db.LargeBinary)
     name = db.Column(db.TEXT, nullable=False)
     mimetype = db.Column(db.TEXT, nullable=False)
 
