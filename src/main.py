@@ -73,7 +73,7 @@ def user():
 
 
 @app.route("/upload", methods=["GET"])
-def Upload():
+def Upload_GET():
     if request.method == "GET":
         records = Upload.query.all()
         return jsonify([Upload.serialize(record) for record in records])
