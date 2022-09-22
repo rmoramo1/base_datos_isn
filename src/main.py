@@ -102,7 +102,7 @@ def createUser():
     password = request.json.get("password", None)
 
     # busca user en BBDD
-    user = User.query.filter_by(
+    user_rc = User.query.filter_by(
         mail=mail, name=name, user=user).first()
     # the user was not found on the database
     if user:
@@ -110,7 +110,7 @@ def createUser():
     else:
         # crea user nuevo
         # crea registro nuevo en BBDD de
-        user = User(
+        user_rc = User(
             name=name,
             mail=mail,
             user=user,
@@ -118,7 +118,7 @@ def createUser():
             born=born,
             password=password
         )
-        db.session.add(user)
+        db.session.add(user_rc)
         db.session.commit()
         return jsonify({"msg": "user created successfully"}), 200
 # -------------------------------------------------------------------------
