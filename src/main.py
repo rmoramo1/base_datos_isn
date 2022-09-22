@@ -206,8 +206,8 @@ def newsUpload(id):
 
 
 @app.route('/user/<id>', methods=['PUT'])
-def newsuser(id):
-    user = User.query.get(id)
+def editUser(id):
+    user_rp = User.query.get(id)
 
     name = request.json['name']
     mail = request.json['mail']
@@ -216,12 +216,12 @@ def newsuser(id):
     born = request.json['born']
     password = request.json['password']
 
-    user.name = name
-    user.mail = mail
-    user.user = user
-    user.country = country
-    user.born = born
-    user.password = password
+    user_rp.name = name
+    user_rp.mail = mail
+    user_rp.user = user
+    user_rp.country = country
+    user_rp.born = born
+    user_rp.password = password
 
     db.session.commit()
     return jsonify({"msg": "user edith successfully"}), 200
