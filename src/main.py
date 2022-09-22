@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
-from flask import Flask, request, jsonify, url_for
+from flask import Flask, request, jsonify, url_for,render_template, redirect
 from werkzeug.utils import secure_filename
 from flask_migrate import Migrate
 from flask_swagger import swagger
@@ -22,6 +22,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_CONNECTION_STRING')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_SECRET_KEY"] = 'JEKAROYCAR'
 jwt = JWTManager(app)
+
+app.secret_key = "roycjs"
+UPLOAD_FOLDER ='static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+ALLOWED_EXTENSIONS = SET(['png','jpg','jpeg','gif'])
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.',1)[1].lower in ALLOWED_EXTENSIONS
+
 
 MIGRATE = Migrate(app, db)
 db.init_app(app)
@@ -72,49 +82,96 @@ def user():
 # ----------------------------------------------------------------------------
 
 
-@app.route("/upload", methods=["GET"])
-def Upload_GET():
-    if request.method == "GET":
-        records = Upload.query.all()
-        return jsonify([Upload.serialize(record) for record in records])
-    else:
-        return jsonify({"msg": "no autorizado"})
+# @app.route("/upload", methods=["GET"])
+# def Upload_GET():
+#     if request.method == "GET":
+#         records = Upload.query.all()
+#         return jsonify([Upload.serialize(record) for record in records])
+#     else:
+#         return jsonify({"msg": "no autorizado"})
 
 # --------------------------post methot--------------------------------------------
+@app.route('/user', methods=['POST'])
+def createuser():
+    name = request.json.get("name", None)
+    mail = request.json.get("mail", None)
+    user = request.json.get("user", None)
+    country = request.json.get("country", None)
+    born = request.json.get("born", None)
+    password = request.json.get("password", None)
 
+    # busca user en BBDD
+    user = User.query.filter_by(
+        mail=mail, name=name, user=user).first()
+    # the user was not found on the database
+    if user:
+        return jsonify({"msg": "user already exists", "Casino": user.mail}), 401
+    else:
+        # crea casino nuevo
+        # crea registro nuevo en BBDD de
+        user = User(
+            name=name,
+            mail=mail,
+            user=user,
+            country=country,
+            born=born,
+            password=password
+        )
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({"msg": "user created successfully"}), 200
+#-------------------------------------------------------------------------
+
+def home():
+    return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def createUpload():
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['file']
+    if file.filename == '':
+        flash('no image')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+        print('upload image filename:' + filename)
 
-    image = request.json.get("image", None)
-    name = request.json.get("name", None)
-    mimetype = request.json.get("mimetype", None)
-
-    like = request.json.get("like", None)
-    dislike = request.json.get("dislike", None)
-    comentario = request.json.get("comentario", None)
-    usuario = request.json.get("usuario", None)
-
-    upload = Upload.query.filter_by(image=image, name=name).first()
-    # the noticias was not found on the database
-    if upload:
-        return jsonify({"msg": "stats_punting_player_nfl already exists", "name": upload.name}), 401
+        flash('image yes')
+        return render_template('indexhtml',filename=filename)
     else:
-        # filename = secure_filename(image.filename)
-        # mimetype = image.mimetype
-        upload = Upload(
-            image=image,
-            name=name,
-            mimetype=mimetype,
+        flash('allowed images')
+        return redirect(request.url)
 
-            like=like,
-            dislike=dislike,
-            comentario=comentario,
-            usuario=usuario
-        )
-    db.session.add(upload)
-    db.session.commit()
-    return jsonify({"msg": "image created successfully"}), 200
+    # img = request.files("img", None)
+    # name = request.json("name", None)
+    # mimetype = request.json("mimetype", None)
+    # like = request.json("like", None)
+    # dislike = request.json("dislike", None)
+    # comentario = request.json("comentario", None)
+    # usuario = request.json("usuario", None)
+
+    # upload = Upload.query.filter_by(
+    #     name=name, dorsal=dorsal, birth=birth).first()
+    # if Upload:
+    #     return jsonify({"msg": "stats_punting_player_nfl already exists", "name": upload.name}), 401
+    # else:
+
+    #     upload = Upload(
+    #         img=img,
+    #         name=name,
+    #         mimetype=mimetype,
+
+    #         like=like,
+    #         dislike=dislike,
+    #         comentario=comentario,
+    #         usuario=usuario
+    #     )
+    #     db.session.add(upload)
+    #     db.session.commit()
+    #     return jsonify({"msg": "User created successfully"}), 200
 
 
 # -------- put ----------------------------------------
@@ -141,6 +198,31 @@ def newsUpload(id):
 
     db.session.commit()
     return jsonify({"msg": "Upload edith successfully"}), 200
+
+#----------------------------------------------------------------------
+
+@app.route('/user/<id>', methods=['PUT'])
+def newsuser(id):
+    user = User.query.get(id)
+
+    name = request.json['name']
+    mail = request.json['mail']
+    user = request.json['user']
+    country = request.json['country']
+    discountry = request.json['discountry']
+    born = request.json['born']
+    password = request.json['password']
+
+    user.name = name
+    user.mail = mail
+    user.user = user
+    user.country = country
+    user.discountry = discountry
+    user.born = born
+    user.password = password
+
+    db.session.commit()
+    return jsonify({"msg": "user edith successfully"}), 200
 
 
 # -------- delete ----------------------------------------

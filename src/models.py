@@ -10,6 +10,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.TEXT(20), nullable=False)
     mail = db.Column(db.String(50), nullable=False)
+    user = db.Column(db.String(50), nullable=False)
+    country = db.Column(db.String(50), nullable=False)
+    born = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     # def __repr__(self):
     #     return '<User %r>' % self.name
@@ -17,8 +20,11 @@ class User(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "name": self.name,
             "mail": self.mail,
-            "name": self.name
+            "user": self.user,
+            "country": self.country,
+            "born": self.born,
             # do not serialize the password, its a security breach
         }
 
@@ -27,7 +33,7 @@ class Upload(db.Model):
     __tablename__ = 'upload'
 
     id = db.Column(db.Integer, primary_key=True)
-    image = db.Column(db.LargeBinary, nullable=False)
+    img = db.Column(db.LargeBinary,unique=True, nullable=False)
     name = db.Column(db.String(50), nullable=False)
     mimetype = db.Column(db.String(50), nullable=False)
 
@@ -39,7 +45,7 @@ class Upload(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "image": self.image,
+          
             "name": self.name,
             "mimetype": self.mimetype,
             "like": self.like,
