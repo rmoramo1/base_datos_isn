@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
-from flask import Flask, request, jsonify, url_for,render_template, redirect
+from flask import Flask, request, jsonify, url_for, render_template, redirect
 from werkzeug.utils import secure_filename
 from flask_migrate import Migrate
 from flask_swagger import swagger
@@ -24,13 +24,14 @@ app.config["JWT_SECRET_KEY"] = 'JEKAROYCAR'
 jwt = JWTManager(app)
 
 app.secret_key = "roycjs"
-UPLOAD_FOLDER ='static/uploads'
+UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-ALLOWED_EXTENSIONS = set(['png','jpg','jpeg','gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.',1)[1].lower in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower in ALLOWED_EXTENSIONS
 
 
 MIGRATE = Migrate(app, db)
@@ -92,7 +93,7 @@ def user():
 
 # --------------------------post methot--------------------------------------------
 @app.route('/user', methods=['POST'])
-def createuser():
+def createUser():
     name = request.json.get("name", None)
     mail = request.json.get("mail", None)
     user = request.json.get("user", None)
@@ -105,7 +106,7 @@ def createuser():
         mail=mail, name=name, user=user).first()
     # the user was not found on the database
     if user:
-        return jsonify({"msg": "user already exists", "NAME": user.name}), 401
+        return jsonify({"msg": "user already exists", "name": user.name}), 401
     else:
         # crea user nuevo
         # crea registro nuevo en BBDD de
@@ -120,10 +121,12 @@ def createuser():
         db.session.add(user)
         db.session.commit()
         return jsonify({"msg": "user created successfully"}), 200
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 def home():
     return render_template('index.html')
+
 
 @app.route('/upload', methods=['POST'])
 def createUpload():
@@ -136,11 +139,11 @@ def createUpload():
         return redirect(request.url)
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         print('upload image filename:' + filename)
 
         flash('image yes')
-        return render_template('indexhtml',filename=filename)
+        return render_template('indexhtml', filename=filename)
     else:
         flash('allowed images')
         return redirect(request.url)
@@ -199,7 +202,8 @@ def newsUpload(id):
     db.session.commit()
     return jsonify({"msg": "Upload edith successfully"}), 200
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+
 
 @app.route('/user/<id>', methods=['PUT'])
 def newsuser(id):
