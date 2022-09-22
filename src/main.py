@@ -105,9 +105,9 @@ def createuser():
         mail=mail, name=name, user=user).first()
     # the user was not found on the database
     if user:
-        return jsonify({"msg": "user already exists", "Casino": user.mail}), 401
+        return jsonify({"msg": "user already exists", "NAME": user.name}), 401
     else:
-        # crea casino nuevo
+        # crea user nuevo
         # crea registro nuevo en BBDD de
         user = User(
             name=name,

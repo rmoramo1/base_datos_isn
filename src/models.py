@@ -8,7 +8,7 @@ class User(db.Model):
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.TEXT(20), nullable=False)
+    name = db.Column(db.String(50), nullable=False)
     mail = db.Column(db.String(50), nullable=False)
     user = db.Column(db.String(50), nullable=False)
     country = db.Column(db.String(50), nullable=False)
@@ -24,7 +24,7 @@ class User(db.Model):
             "mail": self.mail,
             "user": self.user,
             "country": self.country,
-            "born": self.born,
+            "born": self.born
             # do not serialize the password, its a security breach
         }
 
