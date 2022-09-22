@@ -27,7 +27,7 @@ app.secret_key = "roycjs"
 UPLOAD_FOLDER ='static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-ALLOWED_EXTENSIONS = SET(['png','jpg','jpeg','gif'])
+ALLOWED_EXTENSIONS = set(['png','jpg','jpeg','gif'])
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.',1)[1].lower in ALLOWED_EXTENSIONS
