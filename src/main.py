@@ -209,7 +209,6 @@ def newsuser(id):
     mail = request.json['mail']
     user = request.json['user']
     country = request.json['country']
-    discountry = request.json['discountry']
     born = request.json['born']
     password = request.json['password']
 
@@ -217,7 +216,6 @@ def newsuser(id):
     user.mail = mail
     user.user = user
     user.country = country
-    user.discountry = discountry
     user.born = born
     user.password = password
 
