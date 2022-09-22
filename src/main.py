@@ -98,7 +98,7 @@ def createuser():
     user = request.json.get("user", None)
     country = request.json.get("country", None)
     born = request.json.get("born", None)
-    password = request.get("password", None)
+    password = request.json.get("password", None)
 
     # busca user en BBDD
     user = User.query.filter_by(
@@ -210,7 +210,7 @@ def newsuser(id):
     user = request.json['user']
     country = request.json['country']
     born = request.json['born']
-    password = request['password']
+    password = request.json['password']
 
     user.name = name
     user.mail = mail

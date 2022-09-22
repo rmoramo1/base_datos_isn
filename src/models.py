@@ -24,7 +24,8 @@ class User(db.Model):
             "mail": self.mail,
             "user": self.user,
             "country": self.country,
-            "born": self.born
+            "born": self.born,
+            "password": self.password,
             # do not serialize the password, its a security breach
         }
 
