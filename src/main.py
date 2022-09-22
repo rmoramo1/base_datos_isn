@@ -105,8 +105,8 @@ def createUser():
     user_rc = User.query.filter_by(
         mail=mail, name=name, user=user).first()
     # the user was not found on the database
-    if user:
-        return jsonify({"msg": "user already exists", "name": user.name}), 401
+    if user_rc:
+        return jsonify({"msg": "user_rc already exists", "name": user_rc.name}), 401
     else:
         # crea user nuevo
         # crea registro nuevo en BBDD de
