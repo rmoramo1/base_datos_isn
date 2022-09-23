@@ -58,17 +58,16 @@ def sitemap():
 
 @app.route('/login', methods=['POST'])
 def login():
-    name = request.json.get("name", None)
     user = request.json.get("user", None)
     password = request.json.get("password", None)
-    user = User.query.filter_by(user=user, password=password).first()
+    user_P = User.query.filter_by(user=user, password=password).first()
     # valida si estan vacios los ingresos
-    if user is None:
+    if user_P is None:
         return jsonify({"msg": "Bad mail or password"}), 401
     # crear token login
 
-    access_token = create_access_token(identity=user)
-    return jsonify({"token": access_token, "username": user.name})
+    access_token = create_access_token(identity=user_P)
+    return jsonify({"token": access_token, "username": user_P.user})
 
 # obtiene usuario----------------------------------------
 
