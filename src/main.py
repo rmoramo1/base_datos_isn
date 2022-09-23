@@ -59,7 +59,7 @@ def sitemap():
 @app.route('/login', methods=['POST'])
 def login():
     user = request.json.get("user", None)
-    name = request.json.get("name", None)
+    password = request.json.get("password", None)
     print(user)
     print(password)
     usuario = User.query.filter_by(user=user, password=password).first()
