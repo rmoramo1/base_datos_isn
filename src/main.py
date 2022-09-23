@@ -59,7 +59,13 @@ def sitemap():
 @app.route('/login', methods=['POST'])
 def login():
     user = request.json.get("user", None)
+    name = request.json.get("name", None)
+    mail = request.json.get("mail", None)
+    country = request.json.get("country", None)
+    born = request.json.get("born", None)
     password = request.json.get("password", None)
+    print(user)
+    print(password)
     user_P = User.query.filter_by(user=user, password=password).first()
     # valida si estan vacios los ingresos
     if user_P is None:
