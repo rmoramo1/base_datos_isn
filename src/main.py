@@ -101,6 +101,7 @@ def createUser():
     country = request.json.get("country", None)
     born = request.json.get("born", None)
     password = request.json.get("password", None)
+    subscription = request.json.get("subscription", None)
 
     # busca user en BBDD
     user_rc = User.query.filter_by(
@@ -117,6 +118,7 @@ def createUser():
             user=user,
             country=country,
             born=born,
+            subscription=subscription,
             password=password
         )
         db.session.add(user_rc)
@@ -214,14 +216,16 @@ def editUser(id):
     mail = request.json['mail']
     user = request.json['user']
     country = request.json['country']
-    born = request.json['born']
+    born = request.json['born'] 
+    subscription = request.json['subscription'] 
     password = request.json['password']
 
     user_rp.name = name
     user_rp.mail = mail
     user_rp.user = user
     user_rp.country = country
-    user_rp.born = born
+    user_rp.born = born 
+    user_rp.subscription = subscription 
     user_rp.password = password
 
     db.session.commit()

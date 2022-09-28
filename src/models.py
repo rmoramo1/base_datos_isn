@@ -13,6 +13,7 @@ class User(db.Model):
     user = db.Column(db.String(50), nullable=False)
     country = db.Column(db.String(50), nullable=False)
     born = db.Column(db.String(50), nullable=False)
+    subscription = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     # def __repr__(self):
     #     return '<User %r>' % self.name
@@ -25,6 +26,7 @@ class User(db.Model):
             "user": self.user,
             "country": self.country,
             "born": self.born,
+            "subscription": self.subscription,
             # do not serialize the password, its a security breach
         }
 
