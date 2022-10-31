@@ -62,8 +62,8 @@ class Perfil_Tipster(db.Model):
     # Notice that each column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    title = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(500), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     # def __repr__(self):
     #     return '<description %r>' % self.name
@@ -74,5 +74,34 @@ class Perfil_Tipster(db.Model):
             "name": self.name,
             "title": self.title,
             "description": self.description,
+            # do not serialize the password, its a security breach
+        }
+
+class Picks_Tipster(db.Model):
+    __tablename__ = 'picks_tipster'
+    # Here we define columns for the table person
+    # Notice that each column is also a normal Python instance attribute.
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    fecha = db.Column(db.String(20), nullable=False)
+    tipo = db.Column(db.String(20), nullable=False)
+    units = db.Column(db.String(5), nullable=False)
+    deporte = db.Column(db.String(40), nullable=False)
+    equipos = db.Column(db.String(500), nullable=False)
+    lines = db.Column(db.String(500), nullable=False)
+
+    # def __repr__(self):
+    #     return '<tipo %r>' % self.name
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "fecha": self.fecha,
+            "tipo": self.tipo,
+            "units": self.units,
+            "deporte": self.deporte,
+            "equipos": self.equipos,
+            "lines": self.lines
             # do not serialize the password, its a security breach
         }

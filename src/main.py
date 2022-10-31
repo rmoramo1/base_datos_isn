@@ -9,7 +9,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Upload, Perfil_Tipster
+from models import db, User, Upload, Perfil_Tipster ,Picks_Tipster
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -90,7 +90,14 @@ def perfil_tipster():
     else:
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
-
+@app.route("/picks_tipster", methods=["GET"])
+def picks_tipster():
+    if request.method == "GET":
+        records = Picks_Tipster.query.all()
+        return jsonify([Picks_Tipster.serialize(record) for record in records])
+    else:
+        return jsonify({"msg": "no autorizado"})
+# ----------------------------------------------------------------------------
 
 # @app.route("/upload", methods=["GET"])
 # def Upload_GET():
