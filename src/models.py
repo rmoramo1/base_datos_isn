@@ -88,7 +88,7 @@ class Picks_Tipster(db.Model):
     units = db.Column(db.String(5), nullable=False)
     deporte = db.Column(db.String(40), nullable=False)
     equipos = db.Column(db.String(500), nullable=False)
-    lines = db.Column(db.String(500), nullable=False)
+    linea = db.Column(db.String(500), nullable=False)
 
     # def __repr__(self):
     #     return '<tipo %r>' % self.name
@@ -102,6 +102,6 @@ class Picks_Tipster(db.Model):
             "units": self.units,
             "deporte": self.deporte,
             "equipos": self.equipos,
-            "lines": self.lines
+            "linea": self.linea
             # do not serialize the password, its a security breach
         }
