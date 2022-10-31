@@ -55,3 +55,24 @@ class Upload(db.Model):
             "comentario": self.comentario,
             "usuario": self.usuario
         }
+
+class Perfil_Tipster(db.Model):
+    __tablename__ = 'perfil_tipster'
+    # Here we define columns for the table person
+    # Notice that each column is also a normal Python instance attribute.
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(50), nullable=False)
+    # def __repr__(self):
+    #     return '<description %r>' % self.name
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "title": self.mail,
+            "description": self.user,
+            # do not serialize the password, its a security breach
+        }

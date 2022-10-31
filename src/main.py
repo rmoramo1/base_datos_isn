@@ -47,9 +47,9 @@ def handle_invalid_usage(error):
 # generate sitemap with all your endpoints
 
 
-@app.route('/')
-def sitemap():
-    return generate_sitemap(app)
+# @app.route('/')
+# def sitemap():
+#     return generate_sitemap(app)
 
 # obtener usuario de base de datos y crea token
 
@@ -79,6 +79,14 @@ def user():
     if request.method == "GET":
         records = User.query.all()
         return jsonify([User.serialize(record) for record in records])
+    else:
+        return jsonify({"msg": "no autorizado"})
+# ----------------------------------------------------------------------------
+@app.route("/perfil_tipster", methods=["GET"])
+def perfil_tipster():
+    if request.method == "GET":
+        records = Perfil_Tipster.query.all()
+        return jsonify([Perfil_Tipster.serialize(record) for record in records])
     else:
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
