@@ -72,7 +72,7 @@ class Perfil_Tipster(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "title": self.mail,
-            "description": self.user,
+            "title": self.title,
+            "description": self.description,
             # do not serialize the password, its a security breach
         }
