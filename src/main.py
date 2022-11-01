@@ -9,7 +9,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Upload, Perfil_Tipster ,Picks_Tipster
+from models import db, User, Upload, Perfil_Tipster , Picks_Tipster
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -47,9 +47,9 @@ def handle_invalid_usage(error):
 # generate sitemap with all your endpoints
 
 
-# @app.route('/')
-# def sitemap():
-#     return generate_sitemap(app)
+@app.route('/')
+def sitemap():
+    return generate_sitemap(app)
 
 # obtener usuario de base de datos y crea token
 
@@ -140,6 +140,7 @@ def createUser():
         db.session.commit()
         return jsonify({"msg": "user created successfully"}), 200
 # -------------------------------------------------------------------------
+
 @app.route('/perfil_tipster', methods=['POST'])
 def createPerfil_tipster():
     name = request.json.get("name", None)
@@ -147,24 +148,25 @@ def createPerfil_tipster():
     description = request.json.get("description", None)
     password = request.json.get("password", None)
 
-    # busca description en BBDD
-    perfil_tipster1 = Perfil_Tipster.query.filter_by(
+    # busca user en BBDD
+    perfil_tipster = Perfil_Tipster.query.filter_by(
         title=title, name=name, description=description).first()
-    # the description was not found on the database
-    if perfil_tipster1:
-        return jsonify({"msg": "perfil_tipster already exists", "name": perfil_tipster1.name}), 401
+    # the user was not found on the database
+    if perfil_tipster:
+        return jsonify({"msg": "perfil_tipster already exists", "name": perfil_tipster.name}), 401
     else:
-        # crea description nuevo
+        # crea user nuevo
         # crea registro nuevo en BBDD de
-        perfil_tipster1 = Perfil_Tipster(
+        perfil_tipster = Perfil_Tipster(
             name=name,
             title=title,
             description=description,
             password=password
         )
-        db.session.add(perfil_tipster1)
+        db.session.add(perfil_tipster)
         db.session.commit()
-        return jsonify({"msg": "user created successfully"}), 200
+        return jsonify({"msg": "Perfil_Tipster created successfully"}), 200
+
 # -------------------------------------------------------------------------
 @app.route('/picks_tipster', methods=['POST'])
 def createPicks_tipster():
