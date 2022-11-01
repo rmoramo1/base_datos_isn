@@ -47,14 +47,9 @@ def handle_invalid_usage(error):
 # generate sitemap with all your endpoints
 
 
-@app.route('/')
-def sitemap():
-    return generate_sitemap(app)
-
-# obtener usuario de base de datos y crea token
-
-# obtener usuario de base de datos y crea token
-
+# @app.route('/') ---descomentar
+# def sitemap(): ---descomentar
+#     return generate_sitemap(app) ---descomentar
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -149,21 +144,21 @@ def createPerfil_tipster():
     password = request.json.get("password", None)
 
     # busca user en BBDD
-    perfil_tipster = Perfil_Tipster.query.filter_by(
+    perfil_tipster_rj = Perfil_Tipster.query.filter_by(
         title=title, name=name, description=description).first()
     # the user was not found on the database
-    if perfil_tipster:
-        return jsonify({"msg": "perfil_tipster already exists", "name": perfil_tipster.name}), 401
+    if perfil_tipster_rj:
+        return jsonify({"msg": "perfil_tipster_rj already exists", "name": perfil_tipster_rj.name}), 401
     else:
         # crea user nuevo
         # crea registro nuevo en BBDD de
-        perfil_tipster = Perfil_Tipster(
+        perfil_tipster_rj = Perfil_Tipster(
             name=name,
             title=title,
             description=description,
             password=password
         )
-        db.session.add(perfil_tipster)
+        db.session.add(perfil_tipster_rj)
         db.session.commit()
         return jsonify({"msg": "Perfil_Tipster created successfully"}), 200
 
