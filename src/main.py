@@ -148,21 +148,21 @@ def createPerfil_tipster():
     password = request.json.get("password", None)
 
     # busca description en BBDD
-    perfil_tipster = Perfil_Tipster.query.filter_by(
+    perfil_tipster1 = Perfil_Tipster.query.filter_by(
         title=title, name=name, description=description).first()
     # the description was not found on the database
-    if perfil_tipster:
-        return jsonify({"msg": "perfil_tipster already exists", "name": perfil_tipster.name}), 401
+    if perfil_tipster1:
+        return jsonify({"msg": "perfil_tipster already exists", "name": perfil_tipster1.name}), 401
     else:
         # crea description nuevo
         # crea registro nuevo en BBDD de
-        perfil_tipster = Perfil_Tipster(
+        perfil_tipster1 = Perfil_Tipster(
             name=name,
             title=title,
             description=description,
             password=password
         )
-        db.session.add(perfil_tipster)
+        db.session.add(perfil_tipster1)
         db.session.commit()
         return jsonify({"msg": "user created successfully"}), 200
 # -------------------------------------------------------------------------
