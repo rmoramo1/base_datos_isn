@@ -141,7 +141,7 @@ def createUser():
         return jsonify({"msg": "user created successfully"}), 200
 # -------------------------------------------------------------------------
 @app.route('/picks_tipster', methods=['POST'])
-def createUser():
+def createPicks_tipster():
     name = request.json.get("name", None)
     fecha = request.json.get("fecha", None)
     tipo = request.json.get("tipo", None)
