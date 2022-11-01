@@ -140,7 +140,38 @@ def createUser():
         db.session.commit()
         return jsonify({"msg": "user created successfully"}), 200
 # -------------------------------------------------------------------------
+@app.route('/picks_tipster', methods=['POST'])
+def createUser():
+    name = request.json.get("name", None)
+    fecha = request.json.get("fecha", None)
+    tipo = request.json.get("tipo", None)
+    units = request.json.get("units", None)
+    deporte = request.json.get("deporte", None)
+    equipos = request.json.get("equipos", None)
+    linea = request.json.get("linea", None)
 
+    # busca tipo en BBDD
+    picks_tipster = Picks_Tipster.query.filter_by(
+        fecha=fecha, name=name, tipo=tipo).first()
+    # the tipo was not found on the database
+    if picks_tipster:
+        return jsonify({"msg": "picks_tipster already exists", "name": picks_tipster.name}), 401
+    else:
+        # crea tipo nuevo
+        # crea registro nuevo en BBDD de
+        picks_tipster = Picks_Tipster(
+            name=name,
+            fecha=fecha,
+            tipo=tipo,
+            units=units,
+            deporte=deporte,
+            linea=linea,
+            equipos=equipos
+        )
+        db.session.add(picks_tipster)
+        db.session.commit()
+        return jsonify({"msg": "pick created successfully"}), 200
+# -------------------------------------------------------------------------
 
 def home():
     return render_template('index.html')
@@ -222,7 +253,6 @@ def newsUpload(id):
 
 # ----------------------------------------------------------------------
 
-
 @app.route('/user/<id>', methods=['PUT'])
 def editUser(id):
     user_rp = User.query.get(id)
@@ -246,9 +276,33 @@ def editUser(id):
     db.session.commit()
     return jsonify({"msg": "user edith successfully"}), 200
 
+# ----------------------------------------------------------------------
+
+@app.route('/picks_tipster/<id>', methods=['PUT'])
+def editPicks_tipster(id):
+    picks_tipster = Picks_Tipster.query.get(id)
+
+    name = request.json['name']
+    fecha = request.json['fecha']
+    tipo = request.json['tipo']
+    units = request.json['units']
+    deporte = request.json['deporte'] 
+    equipos = request.json['equipos'] 
+    linea = request.json['linea']
+
+    picks_tipster.name = name
+    picks_tipster.fecha = fecha
+    picks_tipster.tipo = tipo
+    picks_tipster.units = units
+    picks_tipster.deporte = deporte 
+    picks_tipster.equipos = equipos 
+    picks_tipster.linea = linea
+
+    db.session.commit()
+    return jsonify({"msg": "Picks_Tipster edith successfully"}), 200
+
 
 # -------- delete ----------------------------------------
-
 
 @app.route("/upload/<id>", methods=["DELETE"])
 def upload_delete(id):
@@ -256,3 +310,13 @@ def upload_delete(id):
     db.session.delete(upload)
     db.session.commit()
     return "Noticia was successfully deleted"
+
+#--------------------------------------------------------
+@app.route("/picks_tipster/<id>", methods=["DELETE"])
+def picks_tipster_delete(id):
+    picks_tipster = Picks_Tipster.query.get(id)
+    db.session.delete(picks_tipster)
+    db.session.commit()
+    return "Noticia was successfully deleted"
+
+#--------------------------------------------------------
