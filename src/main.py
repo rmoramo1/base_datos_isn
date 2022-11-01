@@ -140,6 +140,32 @@ def createUser():
         db.session.commit()
         return jsonify({"msg": "user created successfully"}), 200
 # -------------------------------------------------------------------------
+@app.route('/perfil_tipster', methods=['POST'])
+def createPerfil_tipster():
+    name = request.json.get("name", None)
+    title = request.json.get("title", None)
+    description = request.json.get("description", None)
+    password = request.json.get("password", None)
+
+    # busca description en BBDD
+    perfil_tipster = Perfil_Tipster.query.filter_by(
+        title=title, name=name, description=description).first()
+    # the description was not found on the database
+    if perfil_tipster:
+        return jsonify({"msg": "perfil_tipster already exists", "name": perfil_tipster.name}), 401
+    else:
+        # crea description nuevo
+        # crea registro nuevo en BBDD de
+        perfil_tipster = Perfil_Tipster(
+            name=name,
+            title=title,
+            description=description,
+            password=password
+        )
+        db.session.add(perfil_tipster)
+        db.session.commit()
+        return jsonify({"msg": "user created successfully"}), 200
+# -------------------------------------------------------------------------
 @app.route('/picks_tipster', methods=['POST'])
 def createPicks_tipster():
     name = request.json.get("name", None)
@@ -277,6 +303,24 @@ def editUser(id):
     return jsonify({"msg": "user edith successfully"}), 200
 
 # ----------------------------------------------------------------------
+@app.route('/perfil_tipster/<id>', methods=['PUT'])
+def editPerfil_tipster(id):
+    perfil_tipster = Perfil_Tipster.query.get(id)
+
+    name = request.json['name']
+    title = request.json['title']
+    description = request.json['description']
+    password = request.json['password']
+
+    perfil_tipster.name = name
+    perfil_tipster.title = title
+    perfil_tipster.description = description
+    perfil_tipster.password = password
+
+    db.session.commit()
+    return jsonify({"msg": "Tipster edith successfully"}), 200
+
+# ----------------------------------------------------------------------
 
 @app.route('/picks_tipster/<id>', methods=['PUT'])
 def editPicks_tipster(id):
@@ -317,6 +361,15 @@ def picks_tipster_delete(id):
     picks_tipster = Picks_Tipster.query.get(id)
     db.session.delete(picks_tipster)
     db.session.commit()
-    return "Noticia was successfully deleted"
+    return "pick was successfully deleted"
 
 #--------------------------------------------------------
+@app.route("/perfil_tipster/<id>", methods=["DELETE"])
+def perfil_tipster_delete(id):
+    perfil_tipster = Perfil_Tipster.query.get(id)
+    db.session.delete(perfil_tipster)
+    db.session.commit()
+    return "Tipster was successfully deleted"
+
+#--------------------------------------------------------
+
