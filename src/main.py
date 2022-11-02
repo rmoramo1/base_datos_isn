@@ -146,6 +146,7 @@ def createPicks_tipster():
     deporte = request.json.get("deporte", None)
     equipos = request.json.get("equipos", None)
     linea = request.json.get("linea", None)
+    estado = request.json.get("estado", None)
 
     # busca tipo en BBDD
     picks_tipster = Picks_Tipster.query.filter_by(
@@ -163,7 +164,8 @@ def createPicks_tipster():
             units=units,
             deporte=deporte,
             linea=linea,
-            equipos=equipos
+            equipos=equipos,
+            estado=estado,
         )
         db.session.add(picks_tipster)
         db.session.commit()
@@ -331,6 +333,7 @@ def editPicks_tipster(id):
     deporte = request.json['deporte'] 
     equipos = request.json['equipos'] 
     linea = request.json['linea']
+    estado = request.json['estado']
 
     picks_tipster.name = name
     picks_tipster.fecha = fecha
@@ -339,6 +342,7 @@ def editPicks_tipster(id):
     picks_tipster.deporte = deporte 
     picks_tipster.equipos = equipos 
     picks_tipster.linea = linea
+    picks_tipster.estado = estado
 
     db.session.commit()
     return jsonify({"msg": "Picks_Tipster edith successfully"}), 200
