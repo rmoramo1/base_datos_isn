@@ -89,6 +89,7 @@ class Picks_Tipster(db.Model):
     equipos = db.Column(db.String(500), nullable=False)
     linea = db.Column(db.String(500), nullable=False)
     estado = db.Column(db.String(40), nullable=False)
+    resultado = db.Column(db.String(40), nullable=False)
 
     # def __repr__(self):
     #     return '<tipo %r>' % self.name
@@ -104,5 +105,6 @@ class Picks_Tipster(db.Model):
             "equipos": self.equipos,
             "linea": self.linea,
             "estado": self.estado,
+            "resultado": self.resultado,
             # do not serialize the password, its a security breach
         }
