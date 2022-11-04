@@ -47,9 +47,9 @@ def handle_invalid_usage(error):
 # generate sitemap with all your endpoints
 
 
-# @app.route('/') ---descomentar
-# def sitemap(): ---descomentar
-#     return generate_sitemap(app) ---descomentar
+@app.route('/')
+def sitemap(): 
+    return generate_sitemap(app) 
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -228,59 +228,6 @@ def create_Perfil_Tipster():
 # -------------------------------------------------------------------------
 
 
-def home():
-    return render_template('index.html')
-
-
-# @app.route('/upload', methods=['POST'])
-# def createUpload():
-#     if 'file' not in request.files:
-#         flash('No file part')
-#         return redirect(request.url)
-#     file = request.files['file']
-#     if file.filename == '':
-#         flash('no image')
-#         return redirect(request.url)
-#     if file and allowed_file(file.filename):
-#         filename = secure_filename(file.filename)
-#         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#         print('upload image filename:' + filename)
-
-#         flash('image yes')
-#         return render_template('indexhtml', filename=filename)
-#     else:
-#         flash('allowed images')
-#         return redirect(request.url)
-
-    # img = request.files("img", None)
-    # name = request.json("name", None)
-    # mimetype = request.json("mimetype", None)
-    # like = request.json("like", None)
-    # dislike = request.json("dislike", None)
-    # comentario = request.json("comentario", None)
-    # usuario = request.json("usuario", None)
-
-    # upload = Upload.query.filter_by(
-    #     name=name, dorsal=dorsal, birth=birth).first()
-    # if Upload:
-    #     return jsonify({"msg": "stats_punting_player_nfl already exists", "name": upload.name}), 401
-    # else:
-
-    #     upload = Upload(
-    #         img=img,
-    #         name=name,
-    #         mimetype=mimetype,
-
-    #         like=like,
-    #         dislike=dislike,
-    #         comentario=comentario,
-    #         usuario=usuario
-    #     )
-    #     db.session.add(upload)
-    #     db.session.commit()
-    #     return jsonify({"msg": "User created successfully"}), 200
-
-
 # -------- put ----------------------------------------
 
 @app.route('/upload/<id>', methods=['PUT'])
@@ -390,7 +337,7 @@ def upload_delete(id):
     upload = Upload.query.get(id)
     db.session.delete(upload)
     db.session.commit()
-    return "Noticia was successfully deleted"
+    return "Imagen was successfully deleted"
 
 # --------------------------------------------------------
 
