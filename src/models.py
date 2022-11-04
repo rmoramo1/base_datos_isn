@@ -48,7 +48,6 @@ class Upload(db.Model):
         return {
             "id": self.id,
           
-            "img": self.img,
             "name": self.name,
             "mimetype": self.mimetype,
             "like": self.like,
