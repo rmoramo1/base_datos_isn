@@ -15,9 +15,10 @@ from admin import setup_admin
 from models import Perfil_Tipster, Picks_Tipster, Upload, User, db
 from utils import APIException, generate_sitemap
 
-UPLOAD_FOLDER = '/static/media/uploads'
+UPLOAD_FOLDER = '/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
+app.config['UPLOAD_PATH'] = 'uploads'
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -40,12 +41,22 @@ setup_admin(app)
 def allowed_file(filename): 
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS 
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 # generate sitemap with all your endpoints
 
+def validate_image(stream):
+    header = stream.read(512)
+    stream.seek(0) 
+    format = imghdr.what(None, header)
+    if not format:
+        return None
+    return '.' + (format if format != 'jpeg' else 'jpg')
 
 @app.route('/')
 def sitemap(): 
@@ -107,26 +118,17 @@ def _upload():
 # ----------------------------------------------------------------------------
 
 
-
 @app.route('/upload', methods=['POST'])
 def upload():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '':
-            flash('No file selected for uploading')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            flash('File successfully uploaded')
-            return redirect('/')
-        else:
-            flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
-            return redirect(request.url)
+    uploaded_file = request.files['file']
+    filename = secure_filename(uploaded_file.filename)
+    if filename != '':
+        file_ext = os.path.splitext(filename)[1]
+        if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
+                file_ext != validate_image(uploaded_file.stream):
+            abort(400)
+        uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+    return redirect(url_for('index'))
             
 # --------------------------post methot--------------------------------------------
 
