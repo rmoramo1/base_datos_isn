@@ -17,8 +17,6 @@ from utils import APIException, generate_sitemap
 
 UPLOAD_FOLDER = '/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
-app.config['UPLOAD_PATH'] = 'uploads'
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -31,6 +29,8 @@ jwt = JWTManager(app)
 
 app.secret_key = "roycjs"
 
+app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
+app.config['UPLOAD_PATH'] = 'uploads'
 
 MIGRATE = Migrate(app, db)
 db.init_app(app)
