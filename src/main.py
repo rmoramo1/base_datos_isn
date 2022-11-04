@@ -97,25 +97,15 @@ def picks_tipster():
     else:
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
+@app.route("/upload", methods=["GET"])
+def _upload():
+    if request.method == "GET":
+        records = Upload.query.all()
+        return jsonify([Upload.serialize(record) for record in records])
+    else:
+        return jsonify({"msg": "no autorizado"})
+# ----------------------------------------------------------------------------
 
-# @app.route("/upload", methods=["GET"])
-# def Upload_GET():
-#     if request.method == "GET":
-#         records = Upload.query.all()
-#         return jsonify([Upload.serialize(record) for record in records])
-#     else:
-#         return jsonify({"msg": "no autorizado"})
-
-# @app.route("/upload", methods=["GET","POST"])
-# def Upload_GET():
-#     if request.method == "POST":
-#         file = request.files['file']
-#         file.save(secure_filename(file.name))
-#         upload = Upload(filename=file.name,data=file.read())
-#         db.session.add(upload)
-#         db.session.commit()
-#         return f'foto:{file.name}'
-#     return render_template('')
 
 
 @app.route('/upload', methods=['POST'])
