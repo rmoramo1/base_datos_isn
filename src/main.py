@@ -9,7 +9,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Upload, Perfil_Tipster , Picks_Tipster
+from models import db, User, Upload, Perfil_Tipster, Picks_Tipster
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -77,6 +77,8 @@ def user():
     else:
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
+
+
 @app.route("/perfil_tipster", methods=["GET"])
 def perfil_tipster():
     if request.method == "GET":
@@ -85,6 +87,8 @@ def perfil_tipster():
     else:
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
+
+
 @app.route("/picks_tipster", methods=["GET"])
 def picks_tipster():
     if request.method == "GET":
@@ -102,7 +106,37 @@ def picks_tipster():
 #     else:
 #         return jsonify({"msg": "no autorizado"})
 
+# @app.route("/upload", methods=["GET","POST"])
+# def Upload_GET():
+#     if request.method == "POST":
+#         file = request.files['file']
+#         file.save(secure_filename(file.name))
+#         upload = Upload(filename=file.name,data=file.read())
+#         db.session.add(upload)
+#         db.session.commit()
+#         return f'foto:{file.name}'
+#     return render_template('')
+
+
+@app.route('/upload', methods=['POST'])
+def upload():
+
+    file = request.files['img']
+    data = file.read()
+    mimetype = render_picture(data)
+    name = request.form['name']
+    like = request.form['like']
+
+    newFile = FileContent(name=file.name, data=data,
+                          rendered_data=mimetype, text=text, like=like)
+    db.session.add(newFile)
+    db.session.commit()
+    flash(f'Pic {newFile.name} uploaded Text: {newFile.text} Location:{newFile.location}')
+
+    return render_template('upload.html')
 # --------------------------post methot--------------------------------------------
+
+
 @app.route('/user', methods=['POST'])
 def createUser():
     name = request.json.get("name", None)
@@ -174,6 +208,8 @@ def createPicks_tipster():
         return jsonify({"msg": "pick created successfully"}), 200
 # -------------------------------------------------------------------------
 # -------------------------------------------------------------------------
+
+
 @app.route('/perfil_tipster', methods=['POST'])
 def create_Perfil_Tipster():
     name = request.json.get("name", None)
@@ -201,29 +237,30 @@ def create_Perfil_Tipster():
         return jsonify({"msg": "pick created successfully"}), 200
 # -------------------------------------------------------------------------
 
+
 def home():
     return render_template('index.html')
 
 
-@app.route('/upload', methods=['POST'])
-def createUpload():
-    if 'file' not in request.files:
-        flash('No file part')
-        return redirect(request.url)
-    file = request.files['file']
-    if file.filename == '':
-        flash('no image')
-        return redirect(request.url)
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        print('upload image filename:' + filename)
+# @app.route('/upload', methods=['POST'])
+# def createUpload():
+#     if 'file' not in request.files:
+#         flash('No file part')
+#         return redirect(request.url)
+#     file = request.files['file']
+#     if file.filename == '':
+#         flash('no image')
+#         return redirect(request.url)
+#     if file and allowed_file(file.filename):
+#         filename = secure_filename(file.filename)
+#         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#         print('upload image filename:' + filename)
 
-        flash('image yes')
-        return render_template('indexhtml', filename=filename)
-    else:
-        flash('allowed images')
-        return redirect(request.url)
+#         flash('image yes')
+#         return render_template('indexhtml', filename=filename)
+#     else:
+#         flash('allowed images')
+#         return redirect(request.url)
 
     # img = request.files("img", None)
     # name = request.json("name", None)
@@ -281,6 +318,7 @@ def newsUpload(id):
 
 # ----------------------------------------------------------------------
 
+
 @app.route('/user/<id>', methods=['PUT'])
 def editUser(id):
     user_rp = User.query.get(id)
@@ -289,22 +327,24 @@ def editUser(id):
     mail = request.json['mail']
     user = request.json['user']
     country = request.json['country']
-    born = request.json['born'] 
-    subscription = request.json['subscription'] 
+    born = request.json['born']
+    subscription = request.json['subscription']
     password = request.json['password']
 
     user_rp.name = name
     user_rp.mail = mail
     user_rp.user = user
     user_rp.country = country
-    user_rp.born = born 
-    user_rp.subscription = subscription 
+    user_rp.born = born
+    user_rp.subscription = subscription
     user_rp.password = password
 
     db.session.commit()
     return jsonify({"msg": "user edith successfully"}), 200
 
 # ----------------------------------------------------------------------
+
+
 @app.route('/perfil_tipster/<id>', methods=['PUT'])
 def editPerfil_tipster(id):
     perfil_tipster = Perfil_Tipster.query.get(id)
@@ -324,6 +364,7 @@ def editPerfil_tipster(id):
 
 # ----------------------------------------------------------------------
 
+
 @app.route('/picks_tipster/<id>', methods=['PUT'])
 def editPicks_tipster(id):
     picks_tipster = Picks_Tipster.query.get(id)
@@ -332,8 +373,8 @@ def editPicks_tipster(id):
     fecha = request.json['fecha']
     tipo = request.json['tipo']
     units = request.json['units']
-    deporte = request.json['deporte'] 
-    equipos = request.json['equipos'] 
+    deporte = request.json['deporte']
+    equipos = request.json['equipos']
     linea = request.json['linea']
     estado = request.json['estado']
     resultado = request.json['resultado']
@@ -342,11 +383,11 @@ def editPicks_tipster(id):
     picks_tipster.fecha = fecha
     picks_tipster.tipo = tipo
     picks_tipster.units = units
-    picks_tipster.deporte = deporte 
-    picks_tipster.equipos = equipos 
+    picks_tipster.deporte = deporte
+    picks_tipster.equipos = equipos
     picks_tipster.linea = linea
-    picks_tipster.estado = estado 
-    picks_tipster.resultado = resultado 
+    picks_tipster.estado = estado
+    picks_tipster.resultado = resultado
 
     db.session.commit()
     return jsonify({"msg": "Picks_Tipster edith successfully"}), 200
@@ -361,7 +402,9 @@ def upload_delete(id):
     db.session.commit()
     return "Noticia was successfully deleted"
 
-#--------------------------------------------------------
+# --------------------------------------------------------
+
+
 @app.route("/picks_tipster/<id>", methods=["DELETE"])
 def picks_tipster_delete(id):
     picks_tipster = Picks_Tipster.query.get(id)
@@ -369,7 +412,9 @@ def picks_tipster_delete(id):
     db.session.commit()
     return "pick was successfully deleted"
 
-#--------------------------------------------------------
+# --------------------------------------------------------
+
+
 @app.route("/perfil_tipster/<id>", methods=["DELETE"])
 def perfil_tipster_delete(id):
     perfil_tipster = Perfil_Tipster.query.get(id)
@@ -377,5 +422,4 @@ def perfil_tipster_delete(id):
     db.session.commit()
     return "Tipster was successfully deleted"
 
-#--------------------------------------------------------
-
+# --------------------------------------------------------
