@@ -47,8 +47,7 @@ class Upload(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-          
-            "img": self.img,
+ 
             "name": self.name,
             "mimetype": self.mimetype,
             "like": self.like,
