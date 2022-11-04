@@ -1,8 +1,9 @@
 import os
-from flask_admin import Admin
-from models import db, User, Upload, Perfil_Tipster , Picks_Tipster
 
+from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+
+from models import Perfil_Tipster, Picks_Tipster, Upload, User, db
 
 
 def setup_admin(app):

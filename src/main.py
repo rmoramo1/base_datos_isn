@@ -2,36 +2,33 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
-from flask import Flask, request, jsonify, url_for, render_template, redirect
-from werkzeug.utils import secure_filename
+
+from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask_cors import CORS
+from flask_jwt_extended import (JWTManager, create_access_token,
+                                get_jwt_identity, jwt_required)
 from flask_migrate import Migrate
 from flask_swagger import swagger
-from flask_cors import CORS
-from utils import APIException, generate_sitemap
-from admin import setup_admin
-from models import db, User, Upload, Perfil_Tipster, Picks_Tipster
+from werkzeug.utils import secure_filename
 
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
+from admin import setup_admin
+from models import Perfil_Tipster, Picks_Tipster, Upload, User, db
+from utils import APIException, generate_sitemap
+
+UPLOAD_FOLDER = '/static/media/uploads'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_CONNECTION_STRING')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_SECRET_KEY"] = 'JEKAROYCAR'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER 
+
 jwt = JWTManager(app)
 
 app.secret_key = "roycjs"
-UPLOAD_FOLDER = 'static/uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower in ALLOWED_EXTENSIONS
 
 
 MIGRATE = Migrate(app, db)
@@ -39,6 +36,9 @@ db.init_app(app)
 CORS(app)
 setup_admin(app)
 # Handle/serialize errors like a JSON object
+
+def allowed_file(filename): 
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS 
 
 
 @app.errorhandler(APIException)
@@ -110,20 +110,24 @@ def _upload():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-
-    file = request.files['img']
-    data = file.read()
-    mimetype = render_picture(data)
-    name = request.form['name']
-    like = request.form['like']
-
-    newFile = FileContent(name=file.name, data=data,
-                          rendered_data=mimetype, text=text, like=like)
-    db.session.add(newFile)
-    db.session.commit()
-    flash(f'Pic {newFile.name} uploaded Text: {newFile.text} Location:{newFile.location}')
-
-    return render_template('upload.html')
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash('No file selected for uploading')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            flash('File successfully uploaded')
+            return redirect('/')
+        else:
+            flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
+            return redirect(request.url)
+            
 # --------------------------post methot--------------------------------------------
 
 
