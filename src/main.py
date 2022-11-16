@@ -119,9 +119,10 @@ def _upload():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    img = request.json.get("img", None)
+    img = request.files['img']
+    mimetype = img.mimetype
+
     name = request.json.get("name", None)
-    mimetype = request.json.get("mimetype", None)
     like = request.json.get("like", None)
     dislike = request.json.get("dislike", None)
     comentario = request.json.get("comentario", None)
@@ -138,7 +139,7 @@ def upload():
         # crea registro nuevo en BBDD de
         upload = Upload(
             name=name,
-            img=img,
+            img=img.read(),
             mimetype=mimetype,
             like=like,
             dislike=dislike,
