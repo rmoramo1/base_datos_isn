@@ -41,9 +41,9 @@ setup_admin(app)
 def allowed_file(filename): 
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+# @app.route('/')
+# def index():
+#     return render_template('index.html')
 
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
@@ -120,35 +120,46 @@ def _upload():
 @app.route('/upload', methods=['POST'])
 def upload():
     img = request.files['img']
-    mimetype = img.mimetype
+    upload = Upload(
+        name = img.filename, 
+        img= img.read(),
+        mimetype = img.mimetype,
+        like = request.json.get("like", None),
+        dislike = request.json.get("dislike", None),
+        comentario = request.json.get("comentario", None),
+        usuario = request.json.get("usuario", None)
+    )
 
-    name = request.json.get("name", None)
-    like = request.json.get("like", None)
-    dislike = request.json.get("dislike", None)
-    comentario = request.json.get("comentario", None)
-    usuario = request.json.get("usuario", None)
 
-    # busca mimetype en BBDD
-    upload = Upload.query.filter_by(
-        img=img, name=name, mimetype=mimetype).first()
-    # the mimetype was not found on the database
-    if upload:
-        return jsonify({"msg": "upload already exists", "name": upload.name}), 401
-    else:
-        # crea mimetype nuevo
-        # crea registro nuevo en BBDD de
-        upload = Upload(
-            name=name,
-            img=img.read(),
-            mimetype=mimetype,
-            like=like,
-            dislike=dislike,
-            comentario=comentario,
-            usuario=usuario,
-        )
-        db.session.add(upload)
-        db.session.commit()
-        return jsonify({"msg": "mimetype created successfully"}), 200
+    # img = request.files['img']
+    # mimetype = img.mimetype
+    # name = request.json.get("name", None)
+    # like = request.json.get("like", None)
+    # dislike = request.json.get("dislike", None)
+    # comentario = request.json.get("comentario", None)
+    # usuario = request.json.get("usuario", None)
+
+    # # busca mimetype en BBDD
+    # upload = Upload.query.filter_by(
+    #     name=name, mimetype=mimetype).first()
+    # # the mimetype was not found on the database
+    # if upload:
+    #     return jsonify({"msg": "upload already exists", "name": upload.name}), 401
+    # else:
+    #     # crea mimetype nuevo
+    #     # crea registro nuevo en BBDD de
+        # upload = Upload(
+        #     name=name,
+        #     img=img.read(),
+        #     mimetype=mimetype,
+        #     like=like,
+        #     dislike=dislike,
+        #     comentario=comentario,
+        #     usuario=usuario,
+        # )
+    db.session.add(upload)
+    db.session.commit()
+    return jsonify({"msg": "mimetype created successfully"}), 200
             
 # --------------------------post methot--------------------------------------------
 
