@@ -119,44 +119,33 @@ def _upload():
 
 @app.route('/upload', methods=['POST'])
 def upload():
+
     img = request.files['img']
-    upload = Upload(
-        name = img.filename, 
-        img= img.read(),
-        mimetype = img.mimetype,
-        like = request.json.get("like", None),
-        dislike = request.json.get("dislike", None),
-        comentario = request.json.get("comentario", None),
-        usuario = request.json.get("usuario", None)
-    )
+    mimetype = img.mimetype
+    name = request.json.get("name", None)
+    like = request.json.get("like", None)
+    dislike = request.json.get("dislike", None)
+    comentario = request.json.get("comentario", None)
+    usuario = request.json.get("usuario", None)
 
-
-    # img = request.files['img']
-    # mimetype = img.mimetype
-    # name = request.json.get("name", None)
-    # like = request.json.get("like", None)
-    # dislike = request.json.get("dislike", None)
-    # comentario = request.json.get("comentario", None)
-    # usuario = request.json.get("usuario", None)
-
-    # # busca mimetype en BBDD
-    # upload = Upload.query.filter_by(
-    #     name=name, mimetype=mimetype).first()
-    # # the mimetype was not found on the database
-    # if upload:
-    #     return jsonify({"msg": "upload already exists", "name": upload.name}), 401
-    # else:
-    #     # crea mimetype nuevo
-    #     # crea registro nuevo en BBDD de
-        # upload = Upload(
-        #     name=name,
-        #     img=img.read(),
-        #     mimetype=mimetype,
-        #     like=like,
-        #     dislike=dislike,
-        #     comentario=comentario,
-        #     usuario=usuario,
-        # )
+    # busca mimetype en BBDD
+    upload = Upload.query.filter_by(
+        name=name, mimetype=mimetype).first()
+    # the mimetype was not found on the database
+    if upload:
+        return jsonify({"msg": "upload already exists", "name": upload.name}), 401
+    else:
+        # crea mimetype nuevo
+        # crea registro nuevo en BBDD de
+        upload = Upload(
+            name=name,
+            img=img.read(),
+            mimetype=mimetype,
+            like=like,
+            dislike=dislike,
+            comentario=comentario,
+            usuario=usuario,
+        )
     db.session.add(upload)
     db.session.commit()
     return jsonify({"msg": "mimetype created successfully"}), 200
