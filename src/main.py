@@ -15,7 +15,6 @@ from admin import setup_admin
 from models import Perfil_Tipster, Picks_Tipster, Upload, User, db
 from utils import APIException, generate_sitemap
 
-UPLOAD_FOLDER = '/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
@@ -23,7 +22,6 @@ app.url_map.strict_slashes = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_CONNECTION_STRING')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_SECRET_KEY"] = 'JEKAROYCAR'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER 
 
 jwt = JWTManager(app)
 
@@ -37,9 +35,6 @@ db.init_app(app)
 CORS(app)
 setup_admin(app)
 # Handle/serialize errors like a JSON object
-
-def allowed_file(filename): 
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS 
 
 # @app.route('/')
 # def index():
