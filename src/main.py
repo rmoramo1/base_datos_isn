@@ -125,8 +125,20 @@ def upload():
         return "no img",400
     name = name
     mimetype = mimetype
+    like = like
+    dislike = dislike
+    comentario = comentario
+    usuario = usuario
 
-    upload =Upload(img=img.read(),mimetype=mimetype, name=file.name)
+    upload =Upload(
+        img=img.read(),
+        mimetype=mimetype,
+        name=name,
+        like=like,
+        dislike=dislike,
+        comentario=comentario,
+        usuario=usuario
+        )
     db.session.add(upload)
     db.session.commit()
     return jsonify({"msg": "mimetype created successfully"}), 200
