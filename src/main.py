@@ -22,7 +22,6 @@ app.url_map.strict_slashes = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_CONNECTION_STRING')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_SECRET_KEY"] = 'JEKAROYCAR'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER 
 
 jwt = JWTManager(app)
 
@@ -120,7 +119,7 @@ def _upload():
 def upload():
 
     img = request.files['img']
-    
+
     name = name
     mimetype = mimetype
     like = like
