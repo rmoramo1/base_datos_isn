@@ -15,7 +15,6 @@ from admin import setup_admin
 from models import Perfil_Tipster, Picks_Tipster, Upload, User, db
 from utils import APIException, generate_sitemap
 
-UPLOAD_FOLDER = '/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
@@ -121,8 +120,7 @@ def _upload():
 def upload():
 
     img = request.files['img']
-    if not img:
-        return "no img",400
+    
     name = name
     mimetype = mimetype
     like = like
