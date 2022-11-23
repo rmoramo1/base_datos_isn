@@ -27,8 +27,8 @@ jwt = JWTManager(app)
 
 app.secret_key = "roycjs"
 
-app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
-app.config['UPLOAD_PATH'] = 'uploads'
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+app.config['UPLOAD_FOLDER'] = './uploads'
 
 MIGRATE = Migrate(app, db)
 db.init_app(app)
@@ -111,13 +111,22 @@ def _upload():
     else:
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
+def alloewd_file(img):
+    img =img.split('.')
+    if img[1] in ALLOWED_EXTENSIONS:
+            return True
+    return False
 
 @app.route('/upload', methods=['POST'])
 def upload():
 
     img = request.files['img']
+
     mimetype = img.mimetype
-    name = request.json.get("name", None)
+    name = secure_filename(img.filename)
+    if img and alloewd_file(name):
+        print("permitido")
+        img.save(os.path.join(app.config["UPLOAD_FOLDER"],name))
     like = request.json.get("like", None)
     dislike = request.json.get("dislike", None)
     comentario = request.json.get("comentario", None)
@@ -133,7 +142,7 @@ def upload():
         # crea mimetype nuevo
         # crea registro nuevo en BBDD de
         upload = Upload(
-            name=name,
+            name=name.filename,
             img=img.read(),
             mimetype=mimetype,
             like=like,
