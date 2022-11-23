@@ -27,34 +27,17 @@ jwt = JWTManager(app)
 
 app.secret_key = "roycjs"
 
-app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
-app.config['UPLOAD_PATH'] = 'uploads'
-
 MIGRATE = Migrate(app, db)
 db.init_app(app)
 CORS(app)
 setup_admin(app)
 # Handle/serialize errors like a JSON object
 
-def allowed_file(filename): 
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS 
-
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
-
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 # generate sitemap with all your endpoints
 
-def validate_image(stream):
-    header = stream.read(512)
-    stream.seek(0) 
-    format = imghdr.what(None, header)
-    if not format:
-        return None
-    return '.' + (format if format != 'jpeg' else 'jpg')
 
 @app.route('/')
 def sitemap(): 
@@ -120,12 +103,12 @@ def upload():
 
     img = request.files['img']
 
-    name = name
-    mimetype = mimetype
-    like = like
-    dislike = dislike
-    comentario = comentario
-    usuario = usuario
+    mimetype = request.json.get("mimetype", None)
+    name = request.json.get("name", None)
+    like = request.json.get("like", None)
+    dislike = request.json.get("dislike", None)
+    comentario = request.json.get("comentario", None)
+    usuario = request.json.get("usuario", None)
 
     upload =Upload(
         img=img.read(),
