@@ -123,8 +123,8 @@ def upload():
     img = request.files['img']
     if not img:
         return "no img",400
-    filename = secure_filename(file.filename)
-    mimetype = img.mimetype
+    name = name
+    mimetype = mimetype
 
     upload =Upload(img=img.read(),mimetype=mimetype, name=file.name)
     db.session.add(upload)
