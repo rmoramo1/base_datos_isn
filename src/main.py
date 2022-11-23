@@ -15,6 +15,7 @@ from admin import setup_admin
 from models import Perfil_Tipster, Picks_Tipster, Upload, User, db
 from utils import APIException, generate_sitemap
 
+UPLOAD_FOLDER = '/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
@@ -22,19 +23,23 @@ app.url_map.strict_slashes = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_CONNECTION_STRING')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_SECRET_KEY"] = 'JEKAROYCAR'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER 
 
 jwt = JWTManager(app)
 
 app.secret_key = "roycjs"
 
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
-app.config['UPLOAD_FOLDER'] = './uploads'
+app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
+app.config['UPLOAD_PATH'] = 'uploads'
 
 MIGRATE = Migrate(app, db)
 db.init_app(app)
 CORS(app)
 setup_admin(app)
 # Handle/serialize errors like a JSON object
+
+def allowed_file(filename): 
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS 
 
 # @app.route('/')
 # def index():
@@ -111,22 +116,13 @@ def _upload():
     else:
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
-def alloewd_file(img):
-    img =img.split('.')
-    if img[1] in ALLOWED_EXTENSIONS:
-            return True
-    return False
 
 @app.route('/upload', methods=['POST'])
 def upload():
 
     img = request.files['img']
-
     mimetype = img.mimetype
-    name = secure_filename(img.filename)
-    if img and alloewd_file(name):
-        print("permitido")
-        img.save(os.path.join(app.config["UPLOAD_FOLDER"],name))
+    name = request.json.get("name", None)
     like = request.json.get("like", None)
     dislike = request.json.get("dislike", None)
     comentario = request.json.get("comentario", None)
@@ -142,7 +138,7 @@ def upload():
         # crea mimetype nuevo
         # crea registro nuevo en BBDD de
         upload = Upload(
-            name=name.filename,
+            name=name,
             img=img.read(),
             mimetype=mimetype,
             like=like,
