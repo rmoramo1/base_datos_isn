@@ -116,12 +116,6 @@ def upload():
     db.session.add(upload)
     db.session.commit()
     return jsonify({"msg": "user created successfully"}), 200
-
-
-    return jsonify({"msg": "mimetype created successfully"}), 200
-
-
-
             
 # --------------------------post methot--------------------------------------------
 
