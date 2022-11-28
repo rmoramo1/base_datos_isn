@@ -101,8 +101,26 @@ def _upload():
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    results = cloudinary.uploader.upload(request.files['img'],public_id=f'assets/uploads',
+    crop='limit',
+    width=450,
+    height=450,
+    tags=['img']
+    )
+    results['secure_url']
+    upload = Upload(
+        img = results['secure_url'],
+        name = files.filename,
+        mimetype = files.mimetype,
+        like = like,
+        dislike = dislike,
+        comentario =comentario,
+        usuario =usuario
+    )
+    db.session.add(upload)
+    db.session.commit()
+    return jsonify({"msg": "user created successfully"}), 200
 
-    cloudinary.uploader.upload(request.files['img'])
 
     return jsonify({"msg": "mimetype created successfully"}), 200
 
