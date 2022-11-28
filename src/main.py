@@ -101,11 +101,7 @@ def _upload():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    results = cloudinary.uploader.upload(request.files['img'],public_id=f'assets/uploads',
-    crop='limit',
-    width=450,
-    height=450,
-    tags=['img']
+    results = cloudinary.uploader.upload(request.files['img']
     )
     results['secure_url']
     upload = Upload(
