@@ -9,11 +9,12 @@ from flask_jwt_extended import (JWTManager, create_access_token,
                                 get_jwt_identity, jwt_required)
 from flask_migrate import Migrate
 from flask_swagger import swagger
-from werkzeug.utils import secure_filename
 
 from admin import setup_admin
 from models import Perfil_Tipster, Picks_Tipster, Upload, User, db
 from utils import APIException, generate_sitemap
+import cloudinary
+import cloudinary.uploader
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -101,57 +102,12 @@ def _upload():
 @app.route('/upload', methods=['POST'])
 def upload():
 
-    img = request.files['img']
+    cloudinary.uploader.upload(request.files['img'])
 
-    mimetype = request.json.get("mimetype", None)
-    name = request.json.get("name", None)
-    like = request.json.get("like", None)
-    dislike = request.json.get("dislike", None)
-    comentario = request.json.get("comentario", None)
-    usuario = request.json.get("usuario", None)
-
-    upload =Upload(
-        img=img.read(),
-        mimetype=mimetype,
-        name=name,
-        like=like,
-        dislike=dislike,
-        comentario=comentario,
-        usuario=usuario
-        )
-    db.session.add(upload)
-    db.session.commit()
     return jsonify({"msg": "mimetype created successfully"}), 200
 
 
-    # mimetype = img.mimetype
-    # name = request.json.get("name", None)
-    # like = request.json.get("like", None)
-    # dislike = request.json.get("dislike", None)
-    # comentario = request.json.get("comentario", None)
-    # usuario = request.json.get("usuario", None)
 
-    # # busca mimetype en BBDD
-    # upload = Upload.query.filter_by(
-    #     name=name, mimetype=mimetype).first()
-    # # the mimetype was not found on the database
-    # if upload:
-    #     return jsonify({"msg": "upload already exists", "name": upload.name}), 401
-    # else:
-    #     # crea mimetype nuevo
-    #     # crea registro nuevo en BBDD de
-    #     upload = Upload(
-    #         name=name,
-    #         img=img.read(),
-    #         mimetype=mimetype,
-    #         like=like,
-    #         dislike=dislike,
-    #         comentario=comentario,
-    #         usuario=usuario,
-    #     )
-    # db.session.add(upload)
-    # db.session.commit()
-    # return jsonify({"msg": "mimetype created successfully"}), 200
             
 # --------------------------post methot--------------------------------------------
 

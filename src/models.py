@@ -1,4 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy, request
+from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
@@ -35,7 +35,7 @@ class Upload(db.Model):
     __tablename__ = 'upload'
 
     id = db.Column(db.Integer, primary_key=True)
-    img = db.Column(db.LargeBinary,unique=True, nullable=False)
+    img = db.Column(db.String(50),unique=True, nullable=False)
     name = db.Column(db.String(50), nullable=False)
     mimetype = db.Column(db.String(50), nullable=False)
 
@@ -44,10 +44,12 @@ class Upload(db.Model):
     comentario = db.Column(db.String(1500), nullable=False)
     usuario = db.Column(db.String(20), nullable=False)
 
+    # def __repr__(self):
+    #     return '<User %r>' % self.username
+
     def serialize(self):
         return {
             "id": self.id,
-
             "name": self.name,
             "mimetype": self.mimetype,
             "like": self.like,

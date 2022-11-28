@@ -23,6 +23,8 @@ flask-security = "*"
 email-validator = "*"
 flask-jwt-extended = "*"
 flask-jwt = "*"
+cloudinary = "*"
+werkzeug = "*"
 
 [requires]
 python_version = "3.9"
