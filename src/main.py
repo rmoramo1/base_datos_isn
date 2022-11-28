@@ -101,13 +101,11 @@ def _upload():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    results = cloudinary.uploader.upload(request.files['img']
+    results = cloudinary.uploader.upload(request.files['imagen']
     )
     results['secure_url']
     upload = Upload(
         img = results['secure_url'],
-        name = files.filename,
-        mimetype = files.mimetype,
         like = like,
         dislike = dislike,
         comentario =comentario,

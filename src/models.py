@@ -36,8 +36,6 @@ class Upload(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     img = db.Column(db.String(50),unique=True, nullable=False)
-    name = db.Column(db.String(50), nullable=False)
-    mimetype = db.Column(db.String(50), nullable=False)
 
     like = db.Column(db.String(20), nullable=False)
     dislike = db.Column(db.String(20), nullable=False)
@@ -50,6 +48,7 @@ class Upload(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "img":self.img,
             "name": self.name,
             "mimetype": self.mimetype,
             "like": self.like,
