@@ -99,7 +99,7 @@ def _upload():
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
 @app.route('/upload', methods=['POST'])
-def createUser():
+def createUpload():
     img = request.json.get("img", None)
     like = request.json.get("like", None)
     dislike = request.json.get("dislike", None)
@@ -128,12 +128,12 @@ def createUser():
 
 
 @app.route('/imagen', methods=['POST'])
-def upload():
+def imagen():
+
     results = cloudinary.uploader.upload(request.files['imagen'])
-    # upload = Upload.query.filter_by(img=img).first()
-    # upload.img = results['secure_url']
-    # db.session.add(upload)
-    # db.session.commit()
+    upload.img = results['secure_url']
+    db.session.add(upload)
+    db.session.commit()
     return jsonify({"msg": "user created successfully"}), 200
 
 
@@ -142,7 +142,7 @@ def upload():
 
 
 @app.route('/user', methods=['POST'])
-def createUpload():
+def createUser():
     name = request.json.get("name", None)
     mail = request.json.get("mail", None)
     user = request.json.get("user", None)
