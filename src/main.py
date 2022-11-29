@@ -122,13 +122,14 @@ def uploadImagen():
         db.session.commit()
         return jsonify({"msg": "user created successfully"}), 200
 
+
 @app.route('/imagen', methods=['POST'])
 def upload():
-    upload = Upload.query.filter_by(img=img).first()
+    # upload = Upload.query.filter_by(img=img).first()
     results = cloudinary.uploader.upload(request.files['imagen'])
-    upload.img = results['secure_url']
-    db.session.add(upload)
-    db.session.commit()
+    # upload.img = results['secure_url']
+    # db.session.add(upload)
+    # db.session.commit()
     return jsonify({"msg": "user created successfully"}), 200
 
 
