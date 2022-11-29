@@ -35,7 +35,7 @@ class Upload(db.Model):
     __tablename__ = 'upload'
 
     id = db.Column(db.Integer, primary_key=True)
-    img = db.Column(db.String(50),unique=True, nullable=False)
+    img = db.Column(db.String(500),unique=True, nullable=False)
 
     like = db.Column(db.String(20), nullable=False)
     dislike = db.Column(db.String(20), nullable=False)

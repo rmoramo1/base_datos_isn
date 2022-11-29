@@ -144,7 +144,7 @@ def upload():
 
 
 @app.route('/user', methods=['POST'])
-def createUser():
+def createUpload():
     name = request.json.get("name", None)
     mail = request.json.get("mail", None)
     user = request.json.get("user", None)
