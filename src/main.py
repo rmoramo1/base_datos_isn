@@ -110,7 +110,19 @@ def upload():
 def uploadImagen():
     results = cloudinary.uploader.upload(request.files['imagen']
     )
-    return jsonify({"msg": "user created successfully"}), 200
+    upload = Upload.filter_by(
+        img = img, usuario = usuario).first()
+    if upload:
+        return jsonify({"mensaje":"img ya existe","imagen":upload.img})
+    else:
+        upload = Upload(
+            img = request.files['imagen'],
+            usuario=usuario
+
+        )
+        db.session.add(upload)
+        db.session.commit()
+        return jsonify({"msg": "user created successfully"}), 200
 
 
             
