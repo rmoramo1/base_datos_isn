@@ -103,14 +103,6 @@ def _upload():
 def upload():
     results = cloudinary.uploader.upload(request.files['imagen']
     )
-    results['secure_url']
-    
-    img = request.json.get("img", None)
-    like = request.json.get("like", None)
-    dislike = request.json.get("dislike", None)
-    comentario = request.json.get("comentario", None)
-    usuario = request.json.get("usuario", None)
-
     upload = Upload(
         img = results['secure_url'],
         like = like,
