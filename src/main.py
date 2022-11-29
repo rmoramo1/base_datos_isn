@@ -99,37 +99,41 @@ def _upload():
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
 @app.route('/upload', methods=['POST'])
-def uploadImagen():
+def createUser():
     img = request.json.get("img", None)
     like = request.json.get("like", None)
     dislike = request.json.get("dislike", None)
     comentario = request.json.get("comentario", None)
     usuario = request.json.get("usuario", None)
 
-    upload = Upload.filter_by(
-        img = img, usuario = usuario).first()
+    # busca dislike en BBDD
+    upload = Upload.query.filter_by(
+        like=like, img=img, dislike=dislike).first()
+    # the dislike was not found on the database
     if upload:
-        return jsonify({"mensaje":"img ya existe","imagen":upload.img})
+        return jsonify({"msg": "upload already exists", "img": upload.img}), 401
     else:
+        # crea dislike nuevo
+        # crea registro nuevo en BBDD de
         upload = Upload(
-            img = img,
+            img=img,
             like=like,
             dislike=dislike,
             comentario=comentario,
-            usuario=usuario
+            usuario=usuario,
         )
         db.session.add(upload)
         db.session.commit()
-        return jsonify({"msg": "user created successfully"}), 200
+        return jsonify({"msg": "dislike created successfully"}), 200
 
 
 @app.route('/imagen', methods=['POST'])
 def upload():
-    # upload = Upload.query.filter_by(img=img).first()
+    upload = Upload.query.filter_by(img=img).first()
     results = cloudinary.uploader.upload(request.files['imagen'])
-    # upload.img = results['secure_url']
-    # db.session.add(upload)
-    # db.session.commit()
+    upload.img = results['secure_url']
+    db.session.add(upload)
+    db.session.commit()
     return jsonify({"msg": "user created successfully"}), 200
 
 
