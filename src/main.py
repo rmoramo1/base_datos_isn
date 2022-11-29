@@ -129,8 +129,8 @@ def createUser():
 
 @app.route('/imagen', methods=['POST'])
 def upload():
-    # upload = Upload.query.filter_by(img=img).first()
     results = cloudinary.uploader.upload(request.files['imagen'])
+    # upload = Upload.query.filter_by(img=img).first()
     # upload.img = results['secure_url']
     # db.session.add(upload)
     # db.session.commit()
