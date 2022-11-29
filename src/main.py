@@ -103,16 +103,16 @@ def _upload():
 def upload():
     results = cloudinary.uploader.upload(request.files['imagen']
     )
-    upload = Upload(
-        img = results['secure_url'],
-        like = like,
-        dislike = dislike,
-        comentario =comentario,
-        usuario =usuario
-    )
-    db.session.add(upload)
-    db.session.commit()
     return jsonify({"msg": "user created successfully"}), 200
+
+
+@app.route('/imagen', methods=['POST'])
+def uploadImagen():
+    results = cloudinary.uploader.upload(request.files['imagen']
+    )
+    return jsonify({"msg": "user created successfully"}), 200
+
+
             
 # --------------------------post methot--------------------------------------------
 
