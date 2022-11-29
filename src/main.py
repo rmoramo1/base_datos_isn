@@ -137,8 +137,6 @@ def upload():
     return jsonify({"msg": "user created successfully"}), 200
 
 
-
-
             
 # --------------------------post methot--------------------------------------------
 

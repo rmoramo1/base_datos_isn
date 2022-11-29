@@ -36,7 +36,6 @@ class Upload(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     img = db.Column(db.String(500),unique=True, nullable=False)
-
     like = db.Column(db.String(20), nullable=False)
     dislike = db.Column(db.String(20), nullable=False)
     comentario = db.Column(db.String(1500), nullable=False)
