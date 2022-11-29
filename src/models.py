@@ -82,7 +82,7 @@ class Picks_Tipster(db.Model):
     name = db.Column(db.String(50), nullable=False)
     fecha = db.Column(db.String(20), nullable=False)
     tipo = db.Column(db.String(20), nullable=False)
-    units = db.Column(db.String(5), nullable=False)
+    units = db.Column(db.String(20), nullable=False)
     deporte = db.Column(db.String(40), nullable=False)
     equipos = db.Column(db.String(500), nullable=False)
     linea = db.Column(db.String(500), nullable=False)
