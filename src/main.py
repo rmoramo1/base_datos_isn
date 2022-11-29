@@ -129,7 +129,7 @@ def createUpload():
 
 @app.route('/imagen', methods=['POST'])
 def imagen():
-    upload = Upload.query.filter_by(imgURL=imgURL).one_or_none()
+    # upload = Upload.query.filter_by(imgURL=imgURL).one_or_none()
     results = cloudinary.uploader.upload(request.files['imagen'])
     upload.imgURL = results['secure_url']
     db.session.add(upload)
