@@ -99,26 +99,35 @@ def _upload():
         return jsonify({"msg": "no autorizado"})
 # ----------------------------------------------------------------------------
 
-@app.route('/upload', methods=['POST'])
+@app.route('/imagen', methods=['POST'])
 def upload():
-    results = cloudinary.uploader.upload(request.files['imagen']
-    )
+    upload = Upload.filter_by(img=img).one_or_one()
+    results = cloudinary.uploader.upload(request.files['imagen'])
+    upload.img = results['secure_url']
+    db.session.add(upload)
+    db.session.commit()
     return jsonify({"msg": "user created successfully"}), 200
 
 
-@app.route('/imagen', methods=['POST'])
+@app.route('/upload', methods=['POST'])
 def uploadImagen():
-    results = cloudinary.uploader.upload(request.files['imagen']
-    )
+    img = request.json.get("img", None)
+    like = request.json.get("like", None)
+    dislike = request.json.get("dislike", None)
+    comentario = request.json.get("comentario", None)
+    usuario = request.json.get("usuario", None)
+
     upload = Upload.filter_by(
         img = img, usuario = usuario).first()
     if upload:
         return jsonify({"mensaje":"img ya existe","imagen":upload.img})
     else:
         upload = Upload(
-            img = request.files['imagen'],
+            img = img,
+            like=like,
+            dislike=dislike,
+            comentario=comentario,
             usuario=usuario
-
         )
         db.session.add(upload)
         db.session.commit()
