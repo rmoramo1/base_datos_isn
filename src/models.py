@@ -35,7 +35,7 @@ class Upload(db.Model):
     __tablename__ = 'upload'
 
     id = db.Column(db.Integer, primary_key=True)
-    img = db.Column(db.String(500),unique=True, nullable=False)
+    imgURL = db.Column(db.String(500),unique=True, nullable=False)
     like = db.Column(db.String(20), nullable=False)
     dislike = db.Column(db.String(20), nullable=False)
     comentario = db.Column(db.String(1500), nullable=False)
@@ -47,7 +47,7 @@ class Upload(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "img":self.img,
+            "imgURL":self.imgURL,
             "like": self.like,
             "dislike": self.dislike,
             "comentario": self.comentario,
